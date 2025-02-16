@@ -68,17 +68,13 @@
 }
 
 .input-field #login-btn{
-    font-size: 20px;
-    padding: 8px;
-    background-color: #2A5CAA;
-    border: none;
-    border-radius: 6px;
-}
-
-.input-field #login-btn a{
-    font-family: actor, sans-serif;
-    font-size: 22px;
     color: white;
+    background: #2A5CAA;
+    font-size: 22px !important;
+    font-family: actor, sans-serif;
+    text-align: center;
+    padding: 8px !important;
+    border-radius: 6px;
 }
 
 #bottom-section{
@@ -120,10 +116,6 @@
     .input-field #login-btn {
         font-size: 18px;
         padding: 10px;
-    }
-
-    .input-field #login-btn a {
-        font-size: 20px;
     }
 
     #bottom-section {

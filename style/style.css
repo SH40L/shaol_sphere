@@ -3,18 +3,17 @@
     padding: 0px;
 }
 
-button {
+.button {
+    color: black;
+    /* width: 100%; */
     font-family: "Audiowide", sans-serif;
+    font-size: 20px;
     font-weight: 400;
+    text-decoration: none;
     cursor: pointer;
 }
 
-button a{
-    text-decoration: none;
-    color: black;
-}
-
-button:hover {
+.button:hover {
     filter: brightness(0.9);
 }
 
@@ -44,7 +43,6 @@ button:hover {
 }
 
 #skip-button {
-    font-size: 20px;
     padding: 10px 30px;
     background-color: white;
     border-radius: 100px;
@@ -90,8 +88,6 @@ button:hover {
 }
 
 #banner-section #button-content .log-reg-btn {
-    font-family: "Audiowide", sans-serif;
-    font-size: 20px;
     padding: 10px 30px;
     border-radius: 100px;
     border: 2px solid rgba(128, 128, 128, 0.50);
@@ -106,7 +102,7 @@ button:hover {
 }
 
 #banner-section #button-content #log-btn {
-    background-color: white;
+    background: white;
 }
 
 
