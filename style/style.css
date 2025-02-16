@@ -1,0 +1,104 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+button:hover {
+    filter: brightness(0.9);
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Audiowide&family=Bebas+Neue&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Actor&family=Anton&family=Audiowide&family=Bebas+Neue&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+/*  font-family: "Audiowide", serif; 
+    font-family: "Actor", serif;
+*/
+
+#landing-page {
+    height: 100vh;
+}
+
+#header {
+    height: 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 20px;
+}
+
+#header-logo {
+    height: 75px;
+    cursor: pointer;
+}
+
+#skip-button {
+    font-family: "Audiowide", sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    padding: 10px 30px;
+    color: black;
+    background-color: white;
+    border-radius: 100px;
+    border: 2px solid rgba(128, 128, 128, 0.50);
+    cursor: pointer;
+}
+
+#banner-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
+}
+#banner-image-content{
+    width: 100%;
+    background-color: #d6e8fe;
+}
+#banner-image {
+    height: 300px;
+}
+
+#banner-section #heading, 
+#banner-section #description {
+    font-family: "Actor", serif;
+    font-size: 40px;
+    font-weight: 600;
+}
+
+#banner-section #description {
+    font-size: 20px;
+    font-weight: 500;
+    padding-top: 10px;
+    padding-bottom: 15px;
+}
+
+#banner-section #button-content {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+}
+
+#banner-section #button-content .log-reg-btn{
+    font-family: "Audiowide", sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    padding: 10px 30px;
+    color: black;
+    border-radius: 100px;
+    border: 2px solid rgba(128, 128, 128, 0.50);
+    cursor: pointer;
+    flex: 1;  /* Ensures both buttons get equal width */
+    max-width: 300px; /* Controls maximum width */
+    text-align: center;
+}
+
+#banner-section #button-content #reg-btn {
+    background: linear-gradient(30deg, #FFF33B, #E93E3A);
+    border: none;
+}
+
+#banner-section #button-content #log-btn {
+    background-color: white;
+}
