@@ -95,7 +95,9 @@
 }
 
 @media (max-width: 768px) {  
-
+    #login-section {
+        margin-top: 50px;
+    }
     #login-box {
         width: 90%; /* Make it fit smaller screens */
         max-width: 400px; /* Prevent too large on tablets */
