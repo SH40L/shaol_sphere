@@ -51,15 +51,17 @@ button:hover {
     text-align: center;
     gap: 15px;
 }
-#banner-image-content{
+
+#banner-image-content {
     width: 100%;
     background-color: #d6e8fe;
 }
+
 #banner-image {
     height: 300px;
 }
 
-#banner-section #heading, 
+#banner-section #heading,
 #banner-section #description {
     font-family: "Actor", sans-serif;
     font-size: 40px;
@@ -80,7 +82,7 @@ button:hover {
     width: 100%;
 }
 
-#banner-section #button-content .log-reg-btn{
+#banner-section #button-content .log-reg-btn {
     font-family: "Audiowide", sans-serif;
     font-size: 20px;
     font-weight: 400;
@@ -89,8 +91,8 @@ button:hover {
     border-radius: 100px;
     border: 2px solid rgba(128, 128, 128, 0.50);
     cursor: pointer;
-    flex: 1;  /* Ensures both buttons get equal width */
-    max-width: 300px; /* Controls maximum width */
+    flex: 1;
+    max-width: 300px;
     text-align: center;
 }
 
@@ -101,4 +103,49 @@ button:hover {
 
 #banner-section #button-content #log-btn {
     background-color: white;
+}
+
+
+@media (max-width: 768px) {
+    #header {
+        height: 80px;
+        padding: 0px 10px;
+    }
+
+    #header-logo {
+        height: 60px;
+    }
+
+    #skip-button {
+        font-size: 16px;
+        padding: 8px 20px;
+    }
+
+    #banner-image {
+        height: 200px;
+    }
+
+    #banner-section #heading {
+        font-size: 28px;
+    }
+
+    #banner-section #description {
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    #banner-section #button-content {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+        display: flex;
+    }
+
+    #banner-section #button-content .log-reg-btn {
+        font-size: 18px;
+        padding: 10px 20px;
+        width: 100%;
+        max-width: 300px;
+        text-align: center;
+    }
 }
