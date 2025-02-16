@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&family=Audiowide&family=Bebas+Neue&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Actor&family=Anton&family=Audiowide&family=Bebas+Neue&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
+#login-page {
+    height: 100vh;
+}
+
 #login-section {
     display: flex;
     justify-content: center;
@@ -91,14 +95,6 @@
 }
 
 @media (max-width: 768px) {  
-    #login-section {
-        display: flex;
-        flex-direction: column;
-        align-items: center; /* Centering the login box */
-        justify-content: center;
-        /* height: 100vh; Full screen height */
-        padding: 20px;
-    }
 
     #login-box {
         width: 90%; /* Make it fit smaller screens */
