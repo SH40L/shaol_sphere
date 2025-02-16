@@ -61,7 +61,7 @@ button:hover {
 
 #banner-section #heading, 
 #banner-section #description {
-    font-family: "Actor", serif;
+    font-family: "Actor", sans-serif;
     font-size: 40px;
     font-weight: 600;
 }
