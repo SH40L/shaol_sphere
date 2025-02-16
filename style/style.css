@@ -3,6 +3,17 @@
     padding: 0px;
 }
 
+button {
+    font-family: "Audiowide", sans-serif;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+button a{
+    text-decoration: none;
+    color: black;
+}
+
 button:hover {
     filter: brightness(0.9);
 }
@@ -33,15 +44,11 @@ button:hover {
 }
 
 #skip-button {
-    font-family: "Audiowide", sans-serif;
     font-size: 20px;
-    font-weight: 400;
     padding: 10px 30px;
-    color: black;
     background-color: white;
     border-radius: 100px;
     border: 2px solid rgba(128, 128, 128, 0.50);
-    cursor: pointer;
 }
 
 #banner-section {
@@ -85,12 +92,9 @@ button:hover {
 #banner-section #button-content .log-reg-btn {
     font-family: "Audiowide", sans-serif;
     font-size: 20px;
-    font-weight: 400;
     padding: 10px 30px;
-    color: black;
     border-radius: 100px;
     border: 2px solid rgba(128, 128, 128, 0.50);
-    cursor: pointer;
     flex: 1;
     max-width: 300px;
     text-align: center;
