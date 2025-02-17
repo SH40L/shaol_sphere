@@ -74,6 +74,7 @@
     font-family: actor, sans-serif;
     text-align: center;
     padding: 8px !important;
+    border: none;
     border-radius: 6px;
 }
 
