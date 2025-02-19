@@ -5,17 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - SHAOL Sphere</title>
-    <link rel="stylesheet" href="style/style.css">
-    <link rel="stylesheet" href="style/log-reg-style.css">
-    <script src="js/reg.js"></script>
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/log-reg-style.css') }}">
+    <script src="{{ url_for('static', filename='js/register.js') }}"></script>
 </head>
 
 <body>
     <main id="register-page">
         <header id="header">
             <div>
-                <a href="index.html"><img id="header-logo" src="assets/Logo.jpg"></a>
+                <a href="{{ url_for('home') }}">
+                    <img id="header-logo" src="{{ url_for('static', filename='assets/Logo.jpg') }}">
+                </a>
             </div>
             <div>
                 <a class="button" id="skip-button">SKIP</a>
@@ -27,17 +28,15 @@
                     <h1>Register</h1>
                     <hr>
                 </div>
-                <form action="">
+                <form id="register-page-form">
                     <div id="register-form">
                         <div class="input-field">
                             <label for="register-username">Username:</label>
-                            <input type="text" name="register-username" id="register-username"
-                                placeholder="Enter your username">
+                            <input type="text" name="username" id="register-username" placeholder="Enter your username">
                         </div>
                         <div class="input-field">
                             <label for="register-name">Full Name:</label>
-                            <input type="text" name="register-name" id="register-name"
-                                placeholder="Enter your full name">
+                            <input type="text" name="full_name" id="register-name" placeholder="Enter your full name">
                         </div>
                         <div class="input-field">
                             <div id="dob-container">
@@ -46,7 +45,6 @@
                                     <select id="day" name="day">
                                         <option value="">Day</option>
                                     </select>
-
                                     <select id="month" name="month">
                                         <option value="">Month</option>
                                         <option value="1">Jan</option>
@@ -62,43 +60,36 @@
                                         <option value="11">Nov</option>
                                         <option value="12">Dec</option>
                                     </select>
-
                                     <select id="year" name="year">
                                         <option value="">Year</option>
                                     </select>
                                 </div>
                             </div>
-
                         </div>
                         <div class="input-field">
                             <label for="register-gender">Gender:</label>
                             <div id="gender-selection">
                                 <label class="gender" id="male">
-                                    <input type="radio" name="register-gender" id="register-gender-male" value="male">
-                                    Male
+                                    <input type="radio" name="gender" id="register-gender-male" value="male"> Male
                                 </label>
                                 <label class="gender" id="female">
-                                    <input type="radio" name="register-gender" id="register-gender-female"
-                                        value="female">
-                                    Female
+                                    <input type="radio" name="gender" id="register-gender-female" value="female"> Female
                                 </label>
                             </div>
                         </div>
                         <div class="input-field">
                             <label for="register-email">Email:</label>
-                            <input type="email" name="register-email" id="register-email"
-                                placeholder="Enter your email">
+                            <input type="email" name="email" id="register-email" placeholder="Enter your email">
                         </div>
                         <div class="input-field">
                             <label for="register-password">Password: </label>
-                            <input type="password" name="register-password" id="register-password"
-                                placeholder="Enter your password">
+                            <input type="password" name="password" id="register-password" placeholder="Enter your password">
                         </div>
                         <div class="input-field">
                             <button type="submit" class="button" id="register-btn">Register</button>
                         </div>
                         <div id="bottom-section">
-                            <p>Already Joined? <a href="login.html">Login Here</a></p>
+                            <p>Already Joined? <a href="{{ url_for('login_page') }}">Login Here</a></p>
                         </div>
                     </div>
                 </form>

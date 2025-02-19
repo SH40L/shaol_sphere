@@ -89,7 +89,7 @@
     display: flex;
     justify-content: space-between;
     font-family: actor, sans-serif;
-    margin-top: -10px;
+    margin-top: 10px;
     margin-bottom: 10px;
 }
 
