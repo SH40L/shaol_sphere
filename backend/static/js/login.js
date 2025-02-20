@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
         showMessage(message, status || "info");
     }
 
-    // ✅ Check if there is a stored success message (from registration)
+    // ✅ Check if there is a stored success message (from registration or password reset)
     const storedMessage = sessionStorage.getItem("loginMessage");
     if (storedMessage) {
         showMessage(storedMessage, "success");
@@ -39,14 +39,15 @@ document.addEventListener("DOMContentLoaded", function () {
             const response = await fetch("/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(loginData)
+                body: JSON.stringify(loginData),
             });
 
             const result = await response.json();
             if (response.ok) {
+                // ✅ Store JWT securely in HttpOnly cookie (handled by the backend)
+                // ✅ Redirect user to the homepage
                 window.location.href = "/";
-            }
-            else {
+            } else {
                 showMessage(result.error, "error");
             }
         } catch (error) {
@@ -54,6 +55,11 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    /**
+     * Displays a message to the user.
+     * @param {string} message - The message to display.
+     * @param {string} type - The type of message ('error' or 'success').
+     */
     function showMessage(message, type) {
         messageBox.textContent = message;
         messageBox.className = `message-box ${type}`;

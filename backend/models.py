@@ -2,7 +2,7 @@ from datetime import datetime
 from database import db
 
 class User(db.Model):
-    __tablename__ = 'users'  # Ensure it matches Neon table
+    __tablename__ = 'users'  # Ensure it matches Neon Tech table
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
@@ -11,6 +11,5 @@ class User(db.Model):
     gender = db.Column(db.String(10), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
-    is_verified = db.Column(db.Boolean, default=False)  # ✅ Used for email verification
-    verification_token = db.Column(db.String(32), unique=True, nullable=True)  # ✅ New column
+    is_verified = db.Column(db.Boolean, default=False)  # ✅ Email verification status
     created_at = db.Column(db.DateTime, default=datetime.utcnow)  # ✅ Auto-fills on creation

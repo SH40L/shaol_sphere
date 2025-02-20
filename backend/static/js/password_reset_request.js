@@ -1,50 +1,34 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("password-reset-form");
+    const resetForm = document.getElementById("password-reset-form");
     const messageBox = document.getElementById("password-reset-message");
 
-    form.addEventListener("submit", async function (event) {
+    resetForm.addEventListener("submit", async function (event) {
         event.preventDefault();
 
         const username = document.getElementById("reset-username").value.trim();
         const email = document.getElementById("reset-email").value.trim();
 
         if (!username || !email) {
-            showMessage("Please fill in all fields.", "error");
+            showMessage("All fields are required.", "error");
             return;
         }
 
         try {
-            console.log("Sending request to /auth/password-reset-request...");
-
-            const response = await fetch("/auth/password-reset-request", {  // ✅ Updated route
+            const response = await fetch("/auth/password-reset-request", { // ✅ Fixed endpoint
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, email })
+                body: JSON.stringify({ username, email }),
             });
 
-            const text = await response.text();  // Get raw response
-            console.log("Raw response:", text);
+            const data = await response.json();
 
-            let result;
-            try {
-                result = JSON.parse(text);
-            } catch (err) {
-                console.error("Failed to parse JSON:", err);
-                showMessage("Server error. Please try again later.", "error");
-                return;
-            }
-
-            console.log("Response received:", result);
-
-            if (result.success) {
-                showMessage(result.message, "success");
-                form.reset();
+            if (response.ok) {
+                showMessage(data.message, "success");
             } else {
-                showMessage(result.message || "An error occurred.", "error");
+                showMessage(data.error, "error");
             }
         } catch (error) {
-            console.error("Error:", error);
-            showMessage("Something went wrong. Check console for details.", "error");
+            showMessage("Something went wrong. Please try again.", "error");
         }
     });
 

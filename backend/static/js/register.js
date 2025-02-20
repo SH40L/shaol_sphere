@@ -76,11 +76,12 @@ async function handleFormSubmit(event) {
         const result = await response.json();
         
         if (response.ok) {
-            // Store success message before redirecting
-            sessionStorage.setItem("loginMessage", result.message);
-            
-            // Redirect immediately to the login page
-            window.location.href = "/login";
+            // Show success message and prompt user to verify email
+            showMessage(result.message, "success");
+
+            setTimeout(() => {
+                window.location.href = "/login"; // Redirect to login page
+            }, 3000);
         } else {
             showMessage(result.error, "error");
         }
