@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - SHAOL Sphere</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/log-reg-style.css') }}">
+    <script src="{{ url_for('static', filename='js/register.js') }}"></script>
+</head>
+
+<body>
+    <main id="register-page">
+        <header id="header">
+            <div>
+                <a href="{{ url_for('home') }}">
+                    <img id="header-logo" src="{{ url_for('static', filename='assets/Logo.jpg') }}"
+                        alt="SHAOL Sphere Logo">
+                </a>
+            </div>
+            <div>
+                <a class="button" id="skip-button">SKIP</a>
+            </div>
+        </header>
+        <div id="register-section">
+            <div id="register-box">
+                <div>
+                    <h1>Register</h1>
+                    <hr>
+                </div>
+
+                <!-- ✅ Added this div for displaying messages -->
+                <div id="register-message" class="message-box" style="display: none;"></div>
+
+                <form id="register-page-form">
+                    <div id="register-form">
+                        <div class="input-field">
+                            <label for="register-username">Username<span class="star">*</span> </label>
+                            <input type="text" name="username" id="register-username" placeholder="Enter your username"
+                                required>
+                        </div>
+                        <div class="input-field">
+                            <label for="register-name">Full Name<span class="star">*</span> </label>
+                            <input type="text" name="full_name" id="register-name" placeholder="Enter your full name"
+                                required>
+                        </div>
+                        <div class="input-field">
+                            <div id="dob-container">
+                                <label for="day">Date of birth</label>
+                                <div id="dob-fields">
+                                    <select id="day" name="day" required>
+                                        <option value="">Day</option>
+                                    </select>
+                                    <select id="month" name="month" required>
+                                        <option value="">Month</option>
+                                        <option value="1">Jan</option>
+                                        <option value="2">Feb</option>
+                                        <option value="3">Mar</option>
+                                        <option value="4">Apr</option>
+                                        <option value="5">May</option>
+                                        <option value="6">Jun</option>
+                                        <option value="7">Jul</option>
+                                        <option value="8">Aug</option>
+                                        <option value="9">Sep</option>
+                                        <option value="10">Oct</option>
+                                        <option value="11">Nov</option>
+                                        <option value="12">Dec</option>
+                                    </select>
+                                    <select id="year" name="year" required>
+                                        <option value="">Year</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-field">
+                            <label for="register-gender">Gender<span class="star">*</span> </label>
+                            <div id="gender-selection">
+                                <label class="gender" id="male">
+                                    <input type="radio" name="gender" id="register-gender-male" value="male" required>
+                                    Male
+                                </label>
+                                <label class="gender" id="female">
+                                    <input type="radio" name="gender" id="register-gender-female" value="female"
+                                        required> Female
+                                </label>
+                            </div>
+                        </div>
+                        <div class="input-field">
+                            <label for="register-email">Email<span class="star">*</span> </label>
+                            <input type="email" name="email" id="register-email" placeholder="Enter your email"
+                                required>
+                        </div>
+                        <div class="input-field">
+                            <label for="register-password">Password<span class="star">*</span> </label>
+                            <input type="password" name="password" id="register-password"
+                                placeholder="Enter your password" required>
+                        </div>
+                        <div class="input-field">
+                            <button type="submit" class="button" id="register-btn">Register</button>
+                        </div>
+                        <div id="bottom-section">
+                            <p>Already Joined? <a href="{{ url_for('login_page') }}">Login Here</a></p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

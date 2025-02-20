@@ -1,0 +1,173 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Audiowide&family=Bebas+Neue&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Actor&family=Anton&family=Audiowide&family=Bebas+Neue&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+/*  font-family: "Audiowide", serif; 
+    font-family: "Actor", serif;
+*/
+
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+.button {
+    color: black;
+    /* width: 100%; */
+    font-family: "Audiowide", sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.button:hover {
+    filter: brightness(0.9);
+}
+
+.message-box {
+    padding: 10px;
+    margin: 10px 0;
+    text-align: center;
+    font-size: 14px;
+    border-radius: 5px;
+    display: none;
+}
+
+.message-box.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message-box.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+
+#landing-page {
+    height: 100vh;
+}
+
+#header {
+    height: 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 20px;
+}
+
+#header-logo {
+    height: 75px;
+    cursor: pointer;
+}
+
+#skip-button {
+    padding: 10px 30px;
+    background-color: white;
+    border-radius: 100px;
+    border: 2px solid rgba(128, 128, 128, 0.50);
+}
+
+#banner-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
+}
+
+#banner-image-content {
+    width: 100%;
+    background-color: #d6e8fe;
+}
+
+#banner-image {
+    height: 300px;
+}
+
+#banner-section #heading,
+#banner-section #description {
+    font-family: "Actor", sans-serif;
+    font-size: 40px;
+    font-weight: 600;
+}
+
+#banner-section #description {
+    font-size: 20px;
+    font-weight: 500;
+    padding-top: 10px;
+    padding-bottom: 15px;
+}
+
+#banner-section #button-content {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+}
+
+#banner-section #button-content .log-reg-btn {
+    padding: 10px 30px;
+    border-radius: 100px;
+    border: 2px solid rgba(128, 128, 128, 0.50);
+    flex: 1;
+    max-width: 300px;
+    text-align: center;
+}
+
+#banner-section #button-content #reg-btn {
+    background: linear-gradient(30deg, #FFF33B, #E93E3A);
+    border: none;
+}
+
+#banner-section #button-content #log-btn {
+    background: white;
+}
+
+
+@media (max-width: 768px) {
+    #header {
+        height: 80px;
+        padding: 0px 10px;
+    }
+
+    #header-logo {
+        height: 60px;
+    }
+
+    #skip-button {
+        font-size: 16px;
+        padding: 8px 20px;
+    }
+
+    #banner-image {
+        height: 200px;
+    }
+
+    #banner-section #heading {
+        font-size: 28px;
+    }
+
+    #banner-section #description {
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    #banner-section #button-content {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+        display: flex;
+    }
+
+    #banner-section #button-content .log-reg-btn {
+        font-size: 18px;
+        padding: 10px 20px;
+        width: 100%;
+        max-width: 300px;
+        text-align: center;
+    }
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SHAOL Sphere</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/log-reg-style.css') }}">
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+
+</head>
+
+<body>
+    <main id="login-page">
+        <header id="header">
+            <div>
+                <a href="{{ url_for('home') }}">
+                    <img id="header-logo" src="{{ url_for('static', filename='assets/Logo.jpg') }}"
+                        alt="SHAOL Sphere Logo">
+                </a>
+            </div>
+            <div>
+                <a class="button" id="skip-button">SKIP</a>
+            </div>
+        </header>
+        <div id="login-section">
+            <div id="login-box">
+                <div>
+                    <h1>Login</h1>
+                    <hr>
+                </div>
+
+                <!-- ✅ Added this div for displaying messages -->
+                <div id="login-message" class="message-box" style="display: none;"></div>
+
+                <form id="login-page-form">
+                    <div id="login-form">
+                        <div class="input-field">
+                            <label for="login-email">Email<span class="star">*</span> </label>
+                            <input type="email" name="email" id="login-email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="input-field">
+                            <label for="login-password">Password<span class="star">*</span> </label>
+                            <input type="password" name="password" id="login-password" placeholder="Enter your password"
+                                required>
+                        </div>
+                        <div class="input-field">
+                            <button type="submit" class="button" id="login-btn">Login</button>
+                        </div>
+                    </div>
+                    <div id="bottom-section">
+                        <p>New Here? <a href="{{ url_for('register_page') }}">Join Us Now</a></p>
+                        <p><a href="#">Forgot Password</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>
