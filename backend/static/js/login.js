@@ -22,6 +22,10 @@ document.addEventListener("DOMContentLoaded", function () {
         event.preventDefault();
         messageBox.style.display = "none"; // Hide message initially
 
+        const loginBtn = document.getElementById("login-btn"); // ✅ Added
+        loginBtn.disabled = true;
+        loginBtn.innerText = "Logging in...";
+
         // Collect form data
         const email = document.getElementById("login-email").value.trim();
         const password = document.getElementById("login-password").value.trim();
@@ -29,10 +33,11 @@ document.addEventListener("DOMContentLoaded", function () {
         // Validate fields
         if (!email || !password) {
             showMessage("Email and password are required!", "error");
+            loginBtn.disabled = false;
+            loginBtn.innerText = "Login";
             return;
         }
 
-        // Prepare data for API request
         const loginData = { email, password };
 
         try {
@@ -49,9 +54,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 window.location.href = "/";
             } else {
                 showMessage(result.error, "error");
+                loginBtn.disabled = false;
+                loginBtn.innerText = "Login";
             }
         } catch (error) {
             showMessage("Something went wrong. Please try again.", "error");
+            loginBtn.disabled = false;
+            loginBtn.innerText = "Login";
         }
     });
 

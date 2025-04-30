@@ -43,6 +43,11 @@ async function handleFormSubmit(event) {
 
     const messageBox = document.getElementById("register-message");
     messageBox.style.display = "none"; // Hide message initially
+    const registerBtn = document.getElementById("register-btn"); // ✅ Added
+
+    // Disable button and change text immediately
+    registerBtn.disabled = true;
+    registerBtn.innerText = "Registering...";
 
     // Collect form data
     const username = document.getElementById("register-username").value.trim();
@@ -57,6 +62,8 @@ async function handleFormSubmit(event) {
     // Validate all fields
     if (!username || !fullName || !day || !month || !year || !gender || !email || !password) {
         showMessage("All fields are required!", "error");
+        registerBtn.disabled = false;
+        registerBtn.innerText = "Register";
         return;
     }
 
@@ -84,9 +91,13 @@ async function handleFormSubmit(event) {
             }, 3000);
         } else {
             showMessage(result.error, "error");
+            registerBtn.disabled = false;
+            registerBtn.innerText = "Register";
         }
     } catch (error) {
         showMessage("Something went wrong. Please try again.", "error");
+        registerBtn.disabled = false;
+        registerBtn.innerText = "Register";
     }
 }
 

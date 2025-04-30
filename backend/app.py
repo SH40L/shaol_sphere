@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, redirect, url_for, session, request, jsonify
 from flask_cors import CORS
 from config import Config
 from database import db
@@ -12,44 +12,51 @@ app.config.from_object(Config)
 
 db.init_app(app)
 mail.init_app(app)
-CORS(app)  # Enable CORS for API requests
+CORS(app)
 
 # ✅ Middleware: Protect Routes Using JWT
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        token = request.headers.get("Authorization")
+        token = session.get("jwt_token")
         if not token:
-            return jsonify({"error": "Token is missing"}), 401
+            return redirect(url_for('login_page'))
         
         try:
             payload = jwt.decode(token, Config.SECRET_KEY, algorithms=["HS256"])
             return f(payload, *args, **kwargs)
         except jwt.ExpiredSignatureError:
-            return jsonify({"error": "Token has expired"}), 401
+            session.pop("jwt_token", None)
+            return redirect(url_for('login_page'))
         except jwt.InvalidTokenError:
-            return jsonify({"error": "Invalid token"}), 401
+            session.pop("jwt_token", None)
+            return redirect(url_for('login_page'))
 
     return decorated
 
-# ✅ Landing Page (Logged-out users only)
+# ✅ Landing Page (public)
 @app.route("/")
 def home():
     return render_template("index.html")
 
-# ✅ Feed Page (Protected with JWT)
+# ✅ Feed Page (only for logged-in users)
 @app.route("/feed")
 @token_required
 def feed(payload):
     return render_template("feed.html", username=payload.get("email"))
 
-# ✅ Login & Register Pages
+# ✅ Login Page (redirect if already logged in)
 @app.route("/login")
 def login_page():
+    if session.get("jwt_token"):
+        return redirect(url_for('feed'))
     return render_template("login.html")
 
+# ✅ Register Page (redirect if already logged in)
 @app.route("/register")
 def register_page():
+    if session.get("jwt_token"):
+        return redirect(url_for('feed'))
     return render_template("register.html")
 
 # ✅ Register authentication routes
