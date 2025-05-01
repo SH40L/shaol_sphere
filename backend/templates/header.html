@@ -1,0 +1,40 @@
+<!-- templates/header.html -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
+<script defer src="{{ url_for('static', filename='js/header.js') }}"></script>
+
+<header class="shaol-header">
+  <div class="header-container">
+    <!-- 🔹 Left: Logo -->
+    <div class="left-section">
+      <a href="/">
+        <img src="{{ url_for('static', filename='assets/Logo.jpg') }}" alt="SHAOL Sphere Logo" class="logo-img">
+      </a>
+    </div>
+
+    <!-- 🔹 Middle: Navigation Icons -->
+    <nav class="main-nav">
+      {% if current_user.is_authenticated %}
+        <a href="/{{ current_user.username }}" id="nav-profile" title="Profile"
+          class="{% if request.path == '/' + current_user.username %}active{% endif %}">&#128100;</a>
+      {% endif %}
+
+      <a href="/" id="nav-feed" title="Feed" class="{% if request.path == '/' %}active{% endif %}">&#128240;</a>
+
+      <a href="/findfriends" id="nav-findfriends" title="Find Friends"
+        class="{% if request.path == '/findfriends' %}active{% endif %}">&#128101;</a>
+
+      <a href="/notifications" id="nav-notifications" title="Notifications"
+        class="{% if request.path == '/notifications' %}active{% endif %}">&#128276;</a>
+    </nav>
+
+    <!-- 🔹 Right: Search & Burger -->
+    <div class="right-section">
+      <input type="text" id="search-posts" placeholder="Search posts..." />
+      <div class="burger-menu" onclick="toggleBurgerMenu()">☰</div>
+      <div id="burger-dropdown" class="burger-dropdown hidden">
+        <a href="/settings">Settings</a>
+        <a href="/auth/logout">Logout</a>
+      </div>
+    </div>
+  </div>
+</header>

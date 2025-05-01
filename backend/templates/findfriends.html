@@ -1,0 +1,37 @@
+<!-- templates/findfriends.html -->
+{% include "header.html" %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/findfriends.css') }}">
+<script defer src="{{ url_for('static', filename='js/findfriends.js') }}"></script>
+
+<div class="findfriends-container">
+  <!-- 🔍 Search Bar -->
+  <div class="search-bar">
+    <input type="text" id="friend-search" placeholder="Search for friends">
+  </div>
+
+  <!-- 🧑 Friend List -->
+  <div id="friend-list">
+    {% for user in users %}
+    <div class="friend-card" data-user-id="{{ user.id }}">
+      <div class="friend-info">
+        <img src="{{ user.profile_pic if user.profile_pic else url_for('static', filename='uploads/default.jpg') }}"
+          class="friend-avatar" data-default-src="{{ url_for('static', filename='uploads/default.jpg') }}" />
+        <div class="friend-details">
+          <a class="friend-name" href="/{{ user.username }}" target="_blank">
+            {{ user.full_name or 'Unknown' }}
+          </a>
+          <div class="friend-bio">{{ user.bio or 'No bio available' }}</div>
+        </div>
+      </div>
+      <button class="follow-btn {% if user.id in following_ids %}following{% endif %}" data-user-id="{{ user.id }}">
+        {% if user.id in following_ids %}Following{% else %}Follow{% endif %}
+      </button>
+    </div>
+    {% endfor %}
+
+    {% if users_empty %}
+    <div class="no-users-message">No users found matching your search.</div>
+    {% endif %}
+  </div>
+</div>

@@ -1,0 +1,86 @@
+{% include 'header.html' %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+<script defer src="{{ url_for('static', filename='js/profile.js') }}"></script>
+
+<!-- ✅ Container for all profile content -->
+<div class="profile-container">
+
+  <!-- 🔹 Cover Image -->
+  <div class="cover-image">
+    <img src="{{ user.cover_image if user.cover_image else url_for('static', filename='uploads/default_cover.jpg') }}"
+         alt="Cover Image"
+         onerror="this.onerror=null;this.src='{{ url_for('static', filename='uploads/default_cover.jpg') }}';">
+  </div>
+
+  <!-- 🔹 Profile Section with padding -->
+  <div class="profile-section">
+    <div class="profile-image">
+      <img src="{{ user.profile_pic if user.profile_pic else url_for('static', filename='uploads/default.jpg') }}"
+           alt="Profile Picture"
+           onerror="this.onerror=null;this.src='{{ url_for('static', filename='uploads/default.jpg') }}';">
+    </div>
+
+    {% if not is_owner %}
+    <button id="follow-btn" onclick="toggleFollow('{{ user.username }}')">
+      {{ 'Unfollow' if is_following else 'Follow' }}
+    </button>
+    {% endif %}
+  </div>
+
+  <!-- 🔹 User Info -->
+  <div class="profile-info">
+    <h2>{{ user.full_name }}</h2>
+    <p class="username">@{{ user.username }}</p>
+    <p class="bio">{{ user.bio }}</p>
+    <p class="location">{{ user.location }}</p>
+
+    <!-- 🔹 Stats -->
+    <div class="profile-stats">
+      <div><strong>{{ posts|length }}</strong><br>Posts</div>
+      <div><strong>{{ follower_count }}</strong><br>Followers</div>
+      <div><strong>{{ following_count }}</strong><br>Following</div>
+      <div><strong>{{ total_likes }}</strong><br>Likes</div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- 🔹 Posts Section -->
+  <div id="posts-section">
+    {% for post in posts %}
+    <div class="post" data-post-id="{{ post.id }}">
+      <div class="post-header">
+        <img src="{{ user.profile_pic if user.profile_pic else url_for('static', filename='uploads/default.jpg') }}"
+             class="post-user-img"
+             onerror="this.onerror=null;this.src='{{ url_for('static', filename='uploads/default.jpg') }}';">
+        <div>
+          <p class="post-user-name">{{ user.full_name }}</p>
+          <p class="post-date">{{ post.created_at.strftime('%b %d, %Y') }}</p>
+        </div>
+        {% if is_owner %}
+        <div class="post-options" onclick="showDeleteMenu('{{ post.id }}')">⋮</div>
+        {% endif %}
+      </div>
+
+      {% if post.media_url %}
+      <div class="post-media">
+        <img src="{{ post.media_url }}" alt="Post Media">
+      </div>
+      {% endif %}
+
+      <p class="post-caption">{{ post.content }}</p>
+
+      <!-- 🔹 Like, Comment, Share -->
+      <div class="post-actions">
+        <button class="like-btn">❤️ Like</button>
+        <button class="comment-btn">💬 Comment</button>
+        <button class="share-btn">🔗 Share</button>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- 🔹 Load More Spinner -->
+  <div id="load-more-spinner" style="display:none;">Loading more posts...</div>
+
+</div>

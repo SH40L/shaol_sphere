@@ -1,0 +1,112 @@
+/* Main header */
+.shaol-header {
+  width: 100%;
+  background-color: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+
+/* Flex layout */
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 20px;
+}
+
+.left-section {
+  flex: 1; /* Takes remaining space on the left */
+}
+
+/* Logo */
+.left-section img.logo-img {
+  height: 50px;
+  cursor: pointer;
+}
+
+/* Nav */
+.main-nav {
+  flex: 0 0 720px; /* Match profile page width */
+  display: flex;
+  justify-content: space-between;
+  gap: 0; /* Remove gap since we're using calculated widths */
+  padding: 0 20px; /* Add some padding on sides */
+}
+
+.main-nav a {
+  font-size: 22px;
+  text-decoration: none;
+  color: #333;
+  flex: 1; /* Make all items equal width */
+  text-align: center; /* Center the icons */
+  padding: 8px 0;
+  position: relative;
+  line-height: 1.5;
+  transition: all 0.3s ease;
+}
+
+/* ✅ Highlight for active item */
+.main-nav a.active {
+  background-color: #e6f0ff;
+  border-bottom: 3px solid #3498db;
+  font-weight: bold;
+}
+
+/* Right section */
+.right-section {
+  flex: 1; /* Takes remaining space on the right */
+  display: flex;
+  justify-content: flex-end; /* Align items to the right */
+  gap: 12px;
+}
+
+#search-posts {
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  width: 220px;
+  font-size: 16px;
+}
+
+.burger-menu {
+  font-size: 26px;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Dropdown menu */
+.burger-dropdown {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  min-width: 140px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: none;
+  z-index: 999;
+}
+
+.burger-dropdown a {
+  display: block;
+  padding: 10px;
+  color: #333;
+  text-decoration: none;
+  border-bottom: 1px solid #eee;
+}
+
+.burger-dropdown a:last-child {
+  border-bottom: none;
+}
+
+.burger-dropdown a:hover {
+  background-color: #f5f5f5;
+}
+
+.burger-dropdown.show {
+  display: block;
+}

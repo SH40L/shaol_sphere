@@ -1,0 +1,241 @@
+/* 🔷 Overall Feed Container */
+.feed-container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 20px 0;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  /* 🖼️ Post Input Box */
+  .create-post-box {
+    background: #effafa;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .create-post-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .create-post-top img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .create-post-top input {
+    flex: 1;
+    padding: 10px 15px;
+    font-size: 15px;
+    border: none;
+    border-radius: 25px;
+    background: #fff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0,0,0,0.05);
+  }
+  
+  .create-post-actions {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15px;
+  }
+  
+  .create-post-actions button {
+    background: none;
+    border: none;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .create-post-actions button:hover {
+    color: #000;
+    font-weight: bold;
+  }
+  
+  /* 📦 Modal Popup */
+  #postModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+  
+  .modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+  }
+  
+  #closeModal {
+    font-size: 20px;
+    cursor: pointer;
+  }
+  
+  #modalCaption {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 14px;
+    resize: none;
+  }
+  
+  #mediaPreview {
+    width: 100%;
+    margin-top: 15px;
+    max-height: 300px;
+    object-fit: contain;
+    border-radius: 8px;
+  }
+  
+  #submitPost {
+    margin-top: 15px;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    background: linear-gradient(to right, #ffd000, #ff512f);
+    color: #000;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  /* 🧑 Post Item */
+  .post {
+    background: #effafa;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .post-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .post-user-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .post-user-name {
+    font-weight: bold;
+    font-size: 15px;
+    margin: 0;
+  }
+  
+  .post-date {
+    font-size: 12px;
+    color: #888;
+    margin: 0;
+  }
+  
+  .post-media img, .post-media video {
+    width: 100%;
+    margin: 10px 0;
+    border-radius: 8px;
+  }
+  
+  .post-caption {
+    font-size: 15px;
+    margin: 10px 0;
+  }
+  
+  .post-actions {
+    display: flex;
+    justify-content: space-around;
+    font-size: 14px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+  }
+  
+  .post-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333;
+  }
+  
+  .post-actions button:hover {
+    color: #000;
+    font-weight: bold;
+  }
+  
+  /* 💬 Comments */
+  .comment-section {
+    background: #fff;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 10px;
+  }
+  
+  .comment {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .comment img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .comment p {
+    margin: 0;
+    font-size: 14px;
+  }
+  
+  /* 💬 Add Comment */
+  .comment-input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .comment-input input {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 14px;
+  }
+  

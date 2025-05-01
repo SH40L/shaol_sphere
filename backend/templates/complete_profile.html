@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Complete Your Profile - SHAOL Sphere</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/complete_profile.css') }}">
+</head>
+<body class="complete-profile-body">
+    <div class="complete-profile-container">
+        <h2>Complete Your Profile</h2>
+        <form method="POST" enctype="multipart/form-data" id="complete-profile-form">
+            <div class="form-group">
+                <label for="profile_pic">Profile Picture</label>
+                <input type="file" name="profile_pic" id="profile_pic" accept="image/*">
+                <img id="profile_preview" class="preview-img" src="" alt="Profile Preview" style="display: none;">
+            </div>
+
+            <div class="form-group">
+                <label for="cover_image">Cover Image</label>
+                <input type="file" name="cover_image" id="cover_image" accept="image/*">
+                <img id="cover_preview" class="preview-img" src="" alt="Cover Preview" style="display: none;">
+            </div>
+
+            <div class="form-group">
+                <label for="bio">Bio</label>
+                <textarea name="bio" id="bio" rows="3" placeholder="Tell us about yourself...">{{ user.bio or '' }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" name="location" id="location" value="{{ user.location or '' }}" placeholder="Enter your city, country">
+            </div>
+
+            <div class="button-row">
+                <button type="submit" class="btn primary">Save</button>
+                <button type="submit" name="skip" value="1" class="btn secondary">Skip for now</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/complete_profile.js') }}"></script>
+</body>
+</html>

@@ -12,11 +12,13 @@
     <main id="landing-page">
         <header id="header">
             <div>
-                <a href="{{ url_for('home') }}">
+                <!-- ✅ FIXED: home → main.home -->
+                <a href="{{ url_for('main.home') }}">
                     <img id="header-logo" src="{{ url_for('static', filename='assets/Logo.jpg') }}" alt="SHAOL Sphere Logo">
                 </a>
             </div>
             <div>
+                <!-- No action button – still safe -->
                 <a class="button" id="skip-button">SKIP</a>
             </div>
         </header>
@@ -29,6 +31,7 @@
                 <p id="description">With SHAOL Sphere you will find new friends from various countries and regions of the world</p>
             </div>
             <div id="button-content">
+                <!-- ✅ No change needed -->
                 <a class="log-reg-btn button" id="reg-btn" href="{{ url_for('register_page') }}">Get Started</a>
                 <a class="log-reg-btn button" id="log-btn" href="{{ url_for('login_page') }}">Login</a>
             </div>
