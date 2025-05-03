@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const profilePreview = document.getElementById("profile_preview");
   const coverPreview = document.getElementById("cover_preview");
   const form = document.getElementById("complete-profile-form");
+  const saveBtn = document.getElementById("save-btn");
 
   // Show image previews
   profileInput.addEventListener("change", function () {
@@ -37,6 +38,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     e.preventDefault();
 
+    // Show loading state
+    saveBtn.disabled = true;
+    saveBtn.innerText = "Saving...";
+
     const formData = new FormData();
 
     // Add selected profile pic file
@@ -63,10 +68,14 @@ document.addEventListener("DOMContentLoaded", function () {
       } else {
         const msg = await response.text();
         alert("Failed to save profile: " + msg);
+        saveBtn.disabled = false;
+        saveBtn.innerText = "Save and Continue";
       }
     } catch (error) {
       console.error(error);
       alert("Error uploading profile. Try again.");
+      saveBtn.disabled = false;
+      saveBtn.innerText = "Save and Continue";
     }
   });
 });

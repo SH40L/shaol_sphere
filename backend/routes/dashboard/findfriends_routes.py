@@ -6,7 +6,7 @@ from config import Config
 
 findfriends = Blueprint("findfriends", __name__)
 
-# ✅ Show Find Friends Page
+# ✅ Main Find Friends Page – Render Only, No Users Loaded Here
 @findfriends.route("/findfriends")
 def find_friends():
     token = session.get("jwt_token")
@@ -19,29 +19,16 @@ def find_friends():
         if not current_user:
             return render_template("index.html")
 
-        # ✅ Fix: Match JS query param "search" instead of "q"
-        query = request.args.get("search", "").lower()
-
-        users_query = User.query.filter(User.id != current_user.id)
-        if query:
-            users_query = users_query.filter(
-                (User.full_name.ilike(f"%{query}%")) |
-                (User.username.ilike(f"%{query}%"))
-            )
-
-        # ✅ Do NOT filter out missing fields anymore
-        users = users_query.all()
-
         following_ids = {
             f.following_id for f in Follower.query.filter_by(follower_id=current_user.id).all()
         }
 
         return render_template(
             "findfriends.html",
-            users=users,
+            users=[],  # ❌ No users loaded initially
             following_ids=following_ids,
             current_user=current_user,
-            users_empty=len(users) == 0
+            users_empty=False
         )
 
     except jwt.ExpiredSignatureError:
@@ -50,6 +37,54 @@ def find_friends():
     except jwt.InvalidTokenError:
         session.pop("jwt_token", None)
         return render_template("index.html")
+
+
+# ✅ API: Return Users for Infinite Scroll (random or search)
+@findfriends.route("/api/findfriends")
+def api_findfriends():
+    token = session.get("jwt_token")
+    if not token:
+        return jsonify([])
+
+    try:
+        payload = jwt.decode(token, Config.SECRET_KEY, algorithms=["HS256"])
+        current_user = User.query.filter_by(email=payload["email"]).first()
+        if not current_user:
+            return jsonify([])
+
+        query = request.args.get("search", "").strip().lower()
+        offset = int(request.args.get("offset", 0))
+        limit = 12
+
+        users_query = User.query.filter(User.id != current_user.id)
+
+        if query:
+            users_query = users_query.filter(
+                (User.full_name.ilike(f"%{query}%")) |
+                (User.username.ilike(f"%{query}%"))
+            ).order_by(User.full_name.asc())
+        else:
+            users_query = users_query.order_by(db.func.random())
+
+        users = users_query.offset(offset).limit(limit).all()
+
+        following_ids = {
+            f.following_id for f in Follower.query.filter_by(follower_id=current_user.id).all()
+        }
+
+        return jsonify([
+            {
+                "id": u.id,
+                "username": u.username,
+                "full_name": u.full_name,
+                "bio": u.bio or "No bio available",
+                "profile_pic": u.profile_pic if u.profile_pic else "/static/uploads/default.jpg",
+                "is_following": u.id in following_ids
+            } for u in users
+        ])
+    except Exception as e:
+        print("🔴 API Error:", e)
+        return jsonify([])
 
 
 # ✅ Follow User

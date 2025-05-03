@@ -34,6 +34,16 @@ class Post(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     user = db.relationship('User', backref='posts')
+    comments = db.relationship('Comment', backref='post', cascade="all, delete-orphan")
+
+    @property
+    def comment_count(self):
+        return len(self.comments)
+
+    @property
+    def like_count(self):
+        from models import Like  # ⛔ avoid circular import at top
+        return Like.query.filter_by(post_id=self.id).count()
 
 class Follower(db.Model):
     __tablename__ = 'followers'

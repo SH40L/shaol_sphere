@@ -13,9 +13,9 @@
 
     <!-- 🔹 Middle: Navigation Icons -->
     <nav class="main-nav">
-      {% if current_user.is_authenticated %}
-        <a href="/{{ current_user.username }}" id="nav-profile" title="Profile"
-          class="{% if request.path == '/' + current_user.username %}active{% endif %}">&#128100;</a>
+      {% if g.user %}
+        <a href="/{{ g.user.username }}" id="nav-profile" title="Profile"
+          class="{% if request.path == '/' + g.user.username %}active{% endif %}">&#128100;</a>
       {% endif %}
 
       <a href="/" id="nav-feed" title="Feed" class="{% if request.path == '/' %}active{% endif %}">&#128240;</a>

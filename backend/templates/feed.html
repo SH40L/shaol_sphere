@@ -3,15 +3,19 @@
 <script defer src="{{ url_for('static', filename='js/feed.js') }}"></script>
 
 <div class="feed-container">
+
   <!-- 🔹 Post Creation Box -->
   <div class="create-post-box">
     <div class="create-post-top">
-      <img src="{{ current_user.profile_pic or url_for('static', filename='uploads/default.jpg') }}" alt="Profile">
+      <a href="/{{ current_user.username }}">
+        <img src="{{ current_user.profile_pic or url_for('static', filename='uploads/default.jpg') }}" alt="Profile"
+          onerror="this.onerror=null;this.src='{{ url_for('static', filename='uploads/default.jpg') }}';">
+      </a>
       <input type="text" placeholder="Write what’s in your mind" id="openPostModal" readonly>
     </div>
     <div class="create-post-actions">
-      <button id="photoBtn">📷 Photo</button>
-      <button id="videoBtn">👥 Video</button>
+      <button class="photo-btn" onclick="document.getElementById('openPostModal').click()">Photo</button>
+      <button class="video-btn" onclick="document.getElementById('openPostModal').click()">Video</button>
     </div>
   </div>
 
@@ -20,39 +24,69 @@
     {% for post in posts %}
     <div class="post" data-post-id="{{ post.id }}">
       <div class="post-header">
-        <img src="{{ post.user.profile_pic or url_for('static', filename='uploads/default.jpg') }}" class="post-user-img">
+        <a href="/{{ post.user.username }}">
+          <img src="{{ post.user.profile_pic or url_for('static', filename='uploads/default.jpg') }}"
+            class="post-user-img"
+            onerror="this.onerror=null;this.src='{{ url_for('static', filename='uploads/default.jpg') }}';">
+        </a>
         <div>
-          <p class="post-user-name">{{ post.user.full_name }}</p>
+          <p class="post-user-name">
+            <a href="/{{ post.user.username }}" class="poster-link">{{ post.user.full_name }}</a>
+          </p>
           <p class="post-date">{{ post.created_at.strftime('%b %d, %Y') }}</p>
         </div>
       </div>
+
+      <!-- ✍️ Post Caption -->
       <p class="post-caption">{{ post.content }}</p>
+
+      <!-- 📷/🎥 Post Media -->
       {% if post.media_url %}
       <div class="post-media">
         {% if post.media_url.endswith('.mp4') %}
-          <video controls src="{{ post.media_url }}"></video>
+        <video controls src="{{ post.media_url }}"></video>
         {% else %}
-          <img src="{{ post.media_url }}">
+        <img src="{{ post.media_url }}">
         {% endif %}
       </div>
       {% endif %}
+
+      <!-- 🧭 Post Actions -->
       <div class="post-actions">
-        <button>👍 <span>{{ post.like_count }}</span> Likes</button>
-        <button>💬 <span>{{ post.comment_count }}</span> Comments</button>
-        <button>🔗 Share</button>
+        <button class="like-btn" data-liked="{{ 'true' if post.liked else 'false' }}" onclick="toggleLike(this)"
+          data-post-id="{{ post.id }}">
+          👍 <span>{{ post.like_count }}</span> Likes
+        </button>
+        <button class="comment-btn">
+          💬 <span>{{ post.comment_count }}</span> Comments
+        </button>
+        <button class="share-btn">🔗 Share</button>
       </div>
+
+      <!-- 💬 Comment Section -->
       <div class="comment-section">
-        {% for comment in post.comments[:1] %}
+        {% if post.recent_comment %}
         <div class="comment">
-          <img src="{{ comment.user.profile_pic or url_for('static', filename='uploads/default.jpg') }}">
-          <p><strong>{{ comment.user.full_name }}</strong> {{ comment.content }}</p>
+          <a href="/{{ post.recent_comment.username }}">
+            <img src="{{ post.recent_comment.user_pic or url_for('static', filename='uploads/default.jpg') }}"
+              onerror="this.onerror=null;this.src='{{ url_for('static', filename='uploads/default.jpg') }}';">
+          </a>
+          <p>
+            <strong><a href="/{{ post.recent_comment.username }}" class="poster-link">{{ post.recent_comment.user_name
+                }}</a></strong>
+            {{ post.recent_comment.content }}
+          </p>
         </div>
-        {% endfor %}
+        {% endif %}
         <div class="comment-input">
-          <img src="{{ current_user.profile_pic or url_for('static', filename='uploads/default.jpg') }}">
-          <input type="text" placeholder="Comment your thought">
+          <img src="{{ current_user.profile_pic or url_for('static', filename='uploads/default.jpg') }}"
+            onerror="this.onerror=null;this.src='{{ url_for('static', filename='uploads/default.jpg') }}';">
+          <input type="text" placeholder="Comment your thought" onkeydown="submitComment(event, this)"
+            data-post-id="{{ post.id }}">
         </div>
       </div>
+
+
     </div>
     {% endfor %}
   </div>
@@ -66,9 +100,15 @@
       <span id="closeModal">&times;</span>
     </div>
     <textarea id="modalCaption" placeholder="What's on your mind?"></textarea>
-    <input type="file" id="mediaInput" accept="image/*,video/*" style="margin-top: 10px;">
+    <label class="upload-label" for="mediaInput">
+      Click or drag to upload image/video
+      <input type="file" id="mediaInput" accept="image/*,video/*">
+    </label>
     <img id="mediaPreview" style="display: none;">
     <video id="videoPreview" controls style="display: none; max-width: 100%; border-radius: 10px;"></video>
-    <button id="submitPost">Post</button>
+    <button id="submitPost" disabled class="disabled-post-btn">Post</button>
   </div>
 </div>
+
+<!-- ✅ Toast Notification -->
+<div id="toast" class="custom-toast">Post submitted!</div>

@@ -5,6 +5,7 @@ from config import Config
 from database import db
 from extensions import mail
 from models import User
+from flask import g, request
 import jwt
 
 # ✅ Blueprint Imports
@@ -47,6 +48,17 @@ def register_page():
     if session.get("jwt_token"):
         return redirect("/")
     return render_template("register.html")
+
+@app.before_request
+def load_user_from_jwt():
+    token = session.get("jwt_token")
+    g.user = None
+    if token:
+        try:
+            payload = jwt.decode(token, Config.SECRET_KEY, algorithms=["HS256"])
+            g.user = User.query.filter_by(email=payload.get("email")).first()
+        except jwt.ExpiredSignatureError:
+            session.pop("jwt_token", None)
 
 # ✅ Register Blueprints
 app.register_blueprint(auth_bp, url_prefix="/auth")

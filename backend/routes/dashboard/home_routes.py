@@ -19,7 +19,7 @@ def get_current_user():
         session.pop("jwt_token", None)
         return None
 
-# ✅ Home route → Redirect based on login state
+# ✅ Home route → root "/"
 @dashboard_bp.route("/")
 def home():
     user = get_current_user()
@@ -33,5 +33,5 @@ def home():
         print("⚠️ Profile incomplete. Redirecting to complete-profile.")
         return redirect("/complete-profile")
 
-    print("✅ Showing feed page.")
-    return render_template("feed.html", user=user)
+    print("✅ Logged in. Loading feed template.")
+    return render_template("feed.html", user=user, current_user=user)
