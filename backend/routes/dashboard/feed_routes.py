@@ -59,6 +59,7 @@ def create_post():
 
 
 # ✅ Load posts (initial + infinite scroll)
+# feed_routes.py - Update load_more_posts route
 @feed.route("/load-posts")
 def load_more_posts():
     if not g.user:
@@ -87,7 +88,7 @@ def load_more_posts():
         comment_count = len(comments)
         recent_comment = comments[-1] if comments else None
 
-        result.append({
+        post_data = {
             "id": post.id,
             "user_name": user.full_name,
             "user_pic": user.profile_pic,
@@ -98,8 +99,26 @@ def load_more_posts():
             "comment_count": comment_count,
             "like_count": Like.query.filter_by(post_id=post.id).count(),
             "liked": Like.query.filter_by(post_id=post.id, user_id=g.user.id).first() is not None,
-            "recent_comment": serialize_comment(recent_comment) if recent_comment else None
-        })
+            "recent_comment": serialize_comment(recent_comment) if recent_comment else None,
+            "shared_from": post.shared_from  # Add this line
+        }
+
+        # Add original post data if it's a shared post
+        if post.shared_from:
+            original_post = Post.query.get(post.shared_from)
+            if original_post:
+                original_user = User.query.get(original_post.user_id)
+                post_data["original_post"] = {
+                    "id": original_post.id,
+                    "user_name": original_user.full_name,
+                    "user_pic": original_user.profile_pic,
+                    "username": original_user.username,
+                    "content": original_post.content,
+                    "media_url": original_post.media_url,
+                    "created_at": original_post.created_at.strftime('%b %d, %Y')
+                }
+
+        result.append(post_data)
 
     return jsonify({"success": True, "posts": result})
 
@@ -168,6 +187,60 @@ def comment_post():
         "your_comment": serialize_comment(new_comment),
         "recent_comment": serialize_comment(recent_comment) if recent_comment else None,
         "comment_count": comment_count
+    })
+
+# ✅ Share a Post
+@feed.route("/share-post", methods=["POST"])
+def share_post():
+    if not g.user:
+        return jsonify({"success": False}), 401
+
+    data = request.json
+    original_post_id = data.get("original_post_id")
+    message = data.get("message", "").strip()
+
+    original_post = Post.query.get(original_post_id)
+    if not original_post:
+        return jsonify({"success": False, "message": "Original post not found"}), 404
+
+    # Create shared post
+    shared_post = Post(
+        user_id=g.user.id,
+        content=message,
+        media_url=None,
+        shared_from=original_post.id,
+        created_at=datetime.utcnow()
+    )
+    db.session.add(shared_post)
+    db.session.commit()
+
+    # Get original post author
+    original_user = User.query.get(original_post.user_id)
+
+    return jsonify({
+        "success": True,
+        "post": {
+            "id": shared_post.id,
+            "user_name": g.user.full_name,
+            "user_pic": g.user.profile_pic,
+            "caption": shared_post.content,
+            "created_at": shared_post.created_at.strftime('%b %d, %Y'),
+            "like_count": 0,
+            "comment_count": 0,
+            "liked": False,
+            "recent_comment": None,
+            "username": g.user.username,
+            "shared_from": original_post.id,
+            "original_post": {
+                "id": original_post.id,
+                "user_name": original_user.full_name,
+                "user_pic": original_user.profile_pic,
+                "username": original_user.username,
+                "content": original_post.content,
+                "media_url": original_post.media_url,
+                "created_at": original_post.created_at.strftime('%b %d, %Y')
+            }
+        }
     })
 
 

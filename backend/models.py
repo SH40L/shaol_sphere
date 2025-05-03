@@ -33,6 +33,10 @@ class Post(db.Model):
     media_url = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    # 🔹 New column for shared posts
+    shared_from = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=True)
+    original_post = db.relationship('Post', remote_side=[id])  # Allow back-reference to original
+
     user = db.relationship('User', backref='posts')
     comments = db.relationship('Comment', backref='post', cascade="all, delete-orphan")
 
