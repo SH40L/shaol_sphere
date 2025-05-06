@@ -5,7 +5,6 @@ from .utils import generate_jwt_token
 
 login_bp = Blueprint("login", __name__)
 
-# 🔐 Login Route
 @login_bp.route("/login", methods=["POST"])
 def login():
     try:
@@ -24,13 +23,9 @@ def login():
         if not user.is_verified:
             return jsonify({"error": "Please verify your email before logging in."}), 403
 
-        # ✅ Generate JWT token after successful login
         token = generate_jwt_token(user.email)
-
-        # ✅ Store token in session
         session['jwt_token'] = token
 
-        # ✅ Decide redirect URL
         redirect_url = "/"
         if not user.profile_completed:
             redirect_url = "/complete-profile"
@@ -44,20 +39,6 @@ def login():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# 🧠 Store token separately (if needed)
-@login_bp.route("/store-token", methods=["POST"])
-def store_token():
-    try:
-        data = request.get_json()
-        token = data.get("token")
-        if not token:
-            return jsonify({"error": "No token provided"}), 400
-        session["jwt_token"] = token
-        return jsonify({"message": "Token stored"}), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-# 🚪 Logout Route — clears session and redirects to index
 @login_bp.route("/logout")
 def logout():
     session.pop("jwt_token", None)

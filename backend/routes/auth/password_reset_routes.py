@@ -83,7 +83,7 @@ def password_reset_request_page():
 def send_password_reset_email(user):
     try:
         token = generate_jwt_token(user.email, expiration_minutes=30)
-        reset_link = url_for('auth.password_reset.password_reset_page', token=token, _external=True)
+        reset_link = url_for('auth.password_reset.password_reset_page', _external=True) + f"?token={token}"
 
         user.password_reset_token = token
         user.password_reset_used = False

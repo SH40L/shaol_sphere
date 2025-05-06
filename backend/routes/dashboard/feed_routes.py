@@ -1,10 +1,23 @@
 from flask import Blueprint, request, jsonify, g, render_template
-from models import Post, User, Follower, Like, Comment
+from models import Post, User, Follower, Like, Comment, Notification
 from database import db
 from datetime import datetime
 import cloudinary.uploader
 
 feed = Blueprint("feed", __name__)
+
+# ✅ Helper: Serialize comment object (moved to top)
+def serialize_comment(comment):
+    if not comment:
+        return None
+    user = User.query.get(comment.user_id)
+    return {
+        "user_name": user.full_name,
+        "user_pic": user.profile_pic,
+        "username": user.username,
+        "content": comment.content,
+        "created_at": comment.created_at.strftime('%b %d, %Y')
+    }
 
 # ✅ POST: Upload new post (image/video + caption)
 @feed.route("/post", methods=["POST"])
@@ -57,9 +70,7 @@ def create_post():
         }
     })
 
-
 # ✅ Load posts (initial + infinite scroll)
-# feed_routes.py - Update load_more_posts route
 @feed.route("/load-posts")
 def load_more_posts():
     if not g.user:
@@ -100,10 +111,9 @@ def load_more_posts():
             "like_count": Like.query.filter_by(post_id=post.id).count(),
             "liked": Like.query.filter_by(post_id=post.id, user_id=g.user.id).first() is not None,
             "recent_comment": serialize_comment(recent_comment) if recent_comment else None,
-            "shared_from": post.shared_from  # Add this line
+            "shared_from": post.shared_from
         }
 
-        # Add original post data if it's a shared post
         if post.shared_from:
             original_post = Post.query.get(post.shared_from)
             if original_post:
@@ -122,7 +132,6 @@ def load_more_posts():
 
     return jsonify({"success": True, "posts": result})
 
-
 # ✅ Like/Unlike Post
 @feed.route("/like-post", methods=["POST"])
 def like_post():
@@ -131,7 +140,6 @@ def like_post():
 
     data = request.json
     post_id = data.get("post_id")
-
     post = Post.query.get(post_id)
     if not post:
         return jsonify({"success": False, "message": "Post not found"}), 404
@@ -146,11 +154,19 @@ def like_post():
         db.session.add(new_like)
         liked = True
 
+        if post.user_id != g.user.id:
+            notification = Notification(
+                recipient_id=post.user_id,
+                sender_id=g.user.id,
+                post_id=post.id,
+                type="like"
+            )
+            db.session.add(notification)
+
     db.session.commit()
     like_count = Like.query.filter_by(post_id=post_id).count()
 
     return jsonify({"success": True, "liked": liked, "like_count": like_count})
-
 
 # ✅ Comment on Post
 @feed.route("/comment-post", methods=["POST"])
@@ -176,6 +192,16 @@ def comment_post():
         created_at=datetime.utcnow()
     )
     db.session.add(new_comment)
+
+    if post.user_id != g.user.id:
+        notification = Notification(
+            recipient_id=post.user_id,
+            sender_id=g.user.id,
+            post_id=post.id,
+            type="comment"
+        )
+        db.session.add(notification)
+
     db.session.commit()
 
     comments = Comment.query.filter_by(post_id=post_id).order_by(Comment.created_at).all()
@@ -189,7 +215,7 @@ def comment_post():
         "comment_count": comment_count
     })
 
-# ✅ Share a Post
+# ✅ Share Post
 @feed.route("/share-post", methods=["POST"])
 def share_post():
     if not g.user:
@@ -203,7 +229,6 @@ def share_post():
     if not original_post:
         return jsonify({"success": False, "message": "Original post not found"}), 404
 
-    # Create shared post
     shared_post = Post(
         user_id=g.user.id,
         content=message,
@@ -212,9 +237,18 @@ def share_post():
         created_at=datetime.utcnow()
     )
     db.session.add(shared_post)
+
+    if original_post.user_id != g.user.id:
+        notification = Notification(
+            recipient_id=original_post.user_id,
+            sender_id=g.user.id,
+            post_id=original_post.id,
+            type="share"
+        )
+        db.session.add(notification)
+
     db.session.commit()
 
-    # Get original post author
     original_user = User.query.get(original_post.user_id)
 
     return jsonify({
@@ -242,17 +276,3 @@ def share_post():
             }
         }
     })
-
-
-# ✅ Helper: Serialize comment object
-def serialize_comment(comment):
-    if not comment:
-        return None
-    user = User.query.get(comment.user_id)
-    return {
-        "user_name": user.full_name,
-        "user_pic": user.profile_pic,
-        "username": user.username,
-        "content": comment.content,
-        "created_at": comment.created_at.strftime('%b %d, %Y')
-    }

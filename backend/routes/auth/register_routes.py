@@ -1,18 +1,13 @@
-# register_routes.py
-# ✅ Handles User Registration and Verification Email Sending
-
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, url_for
 from werkzeug.security import generate_password_hash
 from database import db
 from models import User
 from extensions import mail
 from flask_mail import Message
 from .utils import generate_jwt_token
-from flask import url_for
 
 register_bp = Blueprint("register", __name__)
 
-# ✅ Function to send verification email
 def send_verification_email(user):
     try:
         token = generate_jwt_token(user.email, expiration_minutes=60)
@@ -44,17 +39,16 @@ def send_verification_email(user):
         print("Error sending email:", e)
         return False
 
-# ✅ Registration Route
 @register_bp.route("/register", methods=["POST"])
 def register():
     try:
         data = request.json
-        username = data.get("username")
-        full_name = data.get("full_name")
-        date_of_birth = data.get("date_of_birth")
-        gender = data.get("gender")
-        email = data.get("email")
-        password = data.get("password")
+        username = data.get("username", "").strip()
+        full_name = data.get("full_name", "").strip()
+        date_of_birth = data.get("date_of_birth", "").strip()
+        gender = data.get("gender", "").strip()
+        email = data.get("email", "").strip()
+        password = data.get("password", "").strip()
 
         if not all([username, full_name, date_of_birth, gender, email, password]):
             return jsonify({"error": "All fields are required"}), 400

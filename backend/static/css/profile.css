@@ -126,6 +126,14 @@
   margin-top: 10px;
 }
 
+.post-media video {
+  width: 100%;
+  max-height: 400px;
+  border-radius: 8px;
+  margin-top: 10px;
+  object-fit: cover;
+}
+
 .post-caption {
   margin-top: 10px;
   font-size: 15px;
@@ -157,4 +165,97 @@
   cursor: pointer;
   font-size: 20px;
   user-select: none;
+}
+
+/* 🔴 Delete Modal Styling */
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.modal-content button {
+  margin: 10px 8px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#confirm-delete {
+  background-color: crimson;
+  color: white;
+}
+
+.modal-content button:hover {
+  opacity: 0.9;
+}
+
+
+.post-options-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.dots-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #333;
+}
+
+.post-options-menu {
+  position: absolute;
+  top: 24px;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  z-index: 1000;
+  min-width: 120px;
+  display: none;
+}
+
+.post-options-menu button {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.post-options-menu button:hover {
+  background-color: #f0f0f0;
+}
+
+/* 🔹 Post Header Left (Image + Name aligned left) */
+.post-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-grow: 1;
+}
+
+/* 🔹 Fix post-header spacing with dots */
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }

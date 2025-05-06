@@ -1,10 +1,8 @@
-# models.py (final updated)
-
 from datetime import datetime
 from database import db
-from flask_login import UserMixin  # ✅ Added for Flask-Login
+from flask_login import UserMixin
 
-class User(db.Model, UserMixin):  # ✅ Inherit from UserMixin
+class User(db.Model, UserMixin):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -24,6 +22,9 @@ class User(db.Model, UserMixin):  # ✅ Inherit from UserMixin
     location = db.Column(db.String(100), default="")
     profile_completed = db.Column(db.Boolean, default=False)
 
+    def __repr__(self):
+        return f"<User {self.username}>"
+
 class Post(db.Model):
     __tablename__ = 'posts'
 
@@ -32,13 +33,14 @@ class Post(db.Model):
     content = db.Column(db.Text, nullable=False)
     media_url = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-    # 🔹 New column for shared posts
     shared_from = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=True)
-    original_post = db.relationship('Post', remote_side=[id])  # Allow back-reference to original
 
+    original_post = db.relationship('Post', remote_side=[id])
     user = db.relationship('User', backref='posts')
     comments = db.relationship('Comment', backref='post', cascade="all, delete-orphan")
+
+    def __repr__(self):
+        return f"<Post {self.id} by User {self.user_id}>"
 
     @property
     def comment_count(self):
@@ -46,7 +48,7 @@ class Post(db.Model):
 
     @property
     def like_count(self):
-        from models import Like  # ⛔ avoid circular import at top
+        from .models import Like
         return Like.query.filter_by(post_id=self.id).count()
 
 class Follower(db.Model):
@@ -57,6 +59,9 @@ class Follower(db.Model):
     following_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    def __repr__(self):
+        return f"<Follow {self.follower_id} -> {self.following_id}>"
+
 class Like(db.Model):
     __tablename__ = 'likes'
 
@@ -64,6 +69,11 @@ class Like(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship('User', backref='likes')
+
+    def __repr__(self):
+        return f"<Like {self.user_id} on {self.post_id}>"
 
 class Comment(db.Model):
     __tablename__ = 'comments'
@@ -73,3 +83,24 @@ class Comment(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship('User', backref='comments')
+
+    def __repr__(self):
+        return f"<Comment by {self.user_id} on Post {self.post_id}>"
+
+class Notification(db.Model):
+    __tablename__ = 'notifications'
+
+    id = db.Column(db.Integer, primary_key=True)
+    recipient_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    sender_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=True)
+    type = db.Column(db.String(20), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    recipient = db.relationship('User', foreign_keys=[recipient_id])
+    sender = db.relationship('User', foreign_keys=[sender_id])
+
+    def __repr__(self):
+        return f"<Notification {self.type} to {self.recipient_id}>"
