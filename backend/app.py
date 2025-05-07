@@ -33,7 +33,7 @@ login_manager.login_view = "login_page"
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    return db.session.get(User, int(user_id))  # Use get() instead of query.get()
 
 # ✅ Login Page
 @app.route("/login")
@@ -59,6 +59,8 @@ def load_user_from_jwt():
             payload = jwt.decode(token, Config.SECRET_KEY, algorithms=["HS256"])
             g.user = User.query.filter_by(email=payload.get("email")).first()
         except jwt.ExpiredSignatureError:
+            session.pop("jwt_token", None)
+        except jwt.PyJWTError:  # Add this to catch all JWT errors
             session.pop("jwt_token", None)
 
 # ✅ Register Blueprints
