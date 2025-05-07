@@ -14,7 +14,12 @@ email_verification_bp = Blueprint("email_verification", __name__)
 def verify_email():
     token = request.args.get("token")
     try:
-        payload = jwt.decode(token, Config.SECRET_KEY, algorithms=["HS256"])
+        payload = jwt.decode(
+            token, 
+            Config.SECRET_KEY, 
+            algorithms=["HS256"], 
+            options={"require_exp": True}  # ✅ Proper placement
+        )
         user = User.query.filter_by(email=payload["email"]).first()
 
         if not user:

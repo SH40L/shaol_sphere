@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify, session, redirect
 from werkzeug.security import check_password_hash
 from models import User
 from .utils import generate_jwt_token
+from config import Config  # <-- Add this line
 
 login_bp = Blueprint("login", __name__)
 
@@ -23,7 +24,7 @@ def login():
         if not user.is_verified:
             return jsonify({"error": "Please verify your email before logging in."}), 403
 
-        token = generate_jwt_token(user.email)
+        token = generate_jwt_token(user.email, expiration_minutes=Config.JWT_EXPIRATION_MINUTES)
         session['jwt_token'] = token
 
         redirect_url = "/"
