@@ -7,13 +7,12 @@ export class ShareManager {
     this.shareMessage = document.getElementById("shareMessage");
     this.sharePreview = document.getElementById("sharePreview");
     this.submitShare = document.getElementById("submitShare");
-    this.feedContainer = document.getElementById("feed-posts"); // Only available on feed page
+    this.feedContainer = document.getElementById("feed-posts");
 
     this.initializeEventListeners();
   }
 
   initializeEventListeners() {
-    // Handle share button clicks anywhere in the doc
     document.addEventListener('click', (e) => {
       const shareButton = e.target.closest('.share-btn');
       if (shareButton) {
@@ -21,16 +20,13 @@ export class ShareManager {
       }
     });
 
-    // Submit share
     this.submitShare.addEventListener('click', (e) => {
       e.preventDefault();
       this.handleShareSubmit();
     });
 
-    // Close modal
     this.closeShareModal.addEventListener('click', () => this.closeModal());
 
-    // Enable/disable share button
     this.shareMessage.addEventListener('input', () => {
       const hasText = this.shareMessage.value.trim().length > 0;
       this.submitShare.disabled = !hasText;
@@ -39,7 +35,6 @@ export class ShareManager {
   }
 
   handleShareClick(shareButton) {
-    // Try get post ID from the button or the closest post container
     let postId = shareButton.dataset.postId;
     const postElem = shareButton.closest('.post');
 
@@ -55,7 +50,6 @@ export class ShareManager {
 
     this.shareModal.dataset.postId = postId;
 
-    // Clone and clean post preview
     const cloned = postElem.cloneNode(true);
     cloned.querySelector('.post-actions')?.remove();
     cloned.querySelector('.comment-section')?.remove();
@@ -75,9 +69,10 @@ export class ShareManager {
 
   closeModal() {
     this.shareModal.style.display = "none";
+    this.shareMessage.value = "";
     this.sharePreview.innerHTML = "";
-    delete this.shareModal.dataset.postId;
     this.submitShare.textContent = "Share";
+    delete this.shareModal.dataset.postId;
   }
 
   async handleShareSubmit() {
@@ -107,11 +102,20 @@ export class ShareManager {
         showToast("Post shared successfully!");
         this.closeModal();
 
-        // ✅ Inject new post into feed if available
+        // ✅ Increment share count on the original post (A)
+        const originalPost = document.querySelector(`.post[data-post-id="${postId}"]`);
+        if (originalPost) {
+          const shareCountSpan = originalPost.querySelector(".share-btn span");
+          if (shareCountSpan) {
+            const currentCount = parseInt(shareCountSpan.textContent) || 0;
+            shareCountSpan.textContent = currentCount + 1;
+          }
+        }
+
+        // ✅ Inject new shared post (B)
         if (this.feedContainer && data.post) {
-          injectNewPost(data.post, this.feedContainer);
+          injectNewPost(data.post, this.feedContainer, true);
         } else {
-          // Otherwise, reload if not on feed
           window.location.reload();
         }
       } else {

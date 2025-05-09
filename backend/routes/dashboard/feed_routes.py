@@ -110,7 +110,8 @@ def load_more_posts():
             "like_count": Like.query.filter_by(post_id=post.id).count(),
             "liked": Like.query.filter_by(post_id=post.id, user_id=g.user.id).first() is not None,
             "recent_comment": serialize_comment(recent_comment) if recent_comment else None,
-            "shared_from": post.shared_from
+            "shared_from": post.shared_from,
+            "share_count": Post.query.filter_by(shared_from=post.id).count()
         }
 
         if post.shared_from:
@@ -214,7 +215,7 @@ def comment_post():
             "user_pic": User.query.get(comment.user_id).profile_pic,
             "username": User.query.get(comment.user_id).username,
             "content": comment.content,
-            "created_at": comment.created_at.strftime('%H:%M')  # TIME ONLY
+            "created_at": comment.created_at.strftime('%b %d, %Y, %H:%M')
         }
 
     return jsonify({
@@ -274,6 +275,7 @@ def share_post():
             "recent_comment": None,
             "username": g.user.username,
             "shared_from": original_post.id,
+            "share_count": 0,
             "original_post": {
                 "id": original_post.id,
                 "user_name": original_user.full_name,
@@ -326,6 +328,7 @@ def view_full_post(post_id):
         "comment_count": len(comments),
         "liked": Like.query.filter_by(post_id=post.id, user_id=g.user.id).first() is not None if g.user else False,
         "shared_from": post.shared_from,
+        "share_count": Post.query.filter_by(shared_from=post.id).count(),
         "original_post": None
     }
 

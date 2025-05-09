@@ -96,7 +96,9 @@
           💬 <span>{{ post.comment_count }}</span> Comments
         </button>
         <!-- Change this line in feed.html -->
-        <button class="share-btn" data-post-id="{{ post.id }}">🔗 Share</button>
+        <button class="share-btn" data-post-id="{{ post.id }}">
+          🔗 <span>{{ post.share_count }}</span> Shares
+        </button>        
       </div>
 
       <!-- 💬 Comment Section -->

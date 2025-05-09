@@ -42,12 +42,14 @@ export function injectNewPost(post, feedContainer, insertAtTop = false) {
           <img src="${post.recent_comment.user_pic || '/static/uploads/default.jpg'}"
             onerror="this.onerror=null;this.src='/static/uploads/default.jpg';">
         </a>
-        <p>
-          <strong><a href="/${post.recent_comment.username}">${post.recent_comment.user_name}</a></strong>
-          ${post.recent_comment.content}
-        </p>
+        <div class="comment-body">
+          <p class="comment-meta">
+            <strong><a href="/${post.recent_comment.username}">${post.recent_comment.user_name}</a></strong>
+          </p>
+          <p class="comment-content">${post.recent_comment.content}</p>
+        </div>
       </div>`;
-  }
+  }  
 
   // ✅ Final HTML
   div.innerHTML = `
@@ -84,7 +86,9 @@ export function injectNewPost(post, feedContainer, insertAtTop = false) {
         👍 <span>${post.like_count}</span> Likes
       </button>
       <button class="comment-btn">💬 <span>${post.comment_count}</span> Comments</button>
-      <button class="share-btn" data-post-id="${post.id}">🔗 Share</button>
+      <button class="share-btn" data-post-id="${post.id}">
+        🔗 <span>${post.share_count ?? 0}</span> Shares
+      </button>
     </div>
 
     <div class="comment-section">
