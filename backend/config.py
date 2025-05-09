@@ -32,3 +32,7 @@ class Config:
     SESSION_COOKIE_SECURE = os.getenv("FLASK_ENV") == "production"
     SESSION_COOKIE_HTTPONLY = True
     REMEMBER_COOKIE_SECURE = True
+
+    # Add to Config class
+    CLOUDINARY_BASE_URL = f"https://res.cloudinary.com/{os.getenv('CLOUDINARY_CLOUD_NAME')}"
+    CLOUDINARY_UPLOAD_PRESET = os.getenv("CLOUDINARY_UPLOAD_PRESET", "shaol_posts")

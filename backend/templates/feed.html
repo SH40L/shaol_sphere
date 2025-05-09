@@ -24,16 +24,26 @@
     {% for post in posts %}
     <div class="post" data-post-id="{{ post.id }}">
       <div class="post-header">
-        <a href="/{{ post.user.username }}">
-          <img src="{{ post.user.profile_pic or url_for('static', filename='uploads/default.jpg') }}"
-            class="post-user-img"
-            onerror="this.onerror=null;this.src='{{ url_for('static', filename='uploads/default.jpg') }}';">
-        </a>
-        <div>
-          <p class="post-user-name">
-            <a href="/{{ post.user.username }}" class="poster-link">{{ post.user.full_name }}</a>
-          </p>
-          <p class="post-date">{{ post.created_at.strftime('%b %d, %Y') }}</p>
+        <div class="post-header-left">
+          <a href="/{{ post.user.username }}">
+            <img src="{{ post.user.profile_pic or url_for('static', filename='uploads/default.jpg') }}"
+              class="post-user-img"
+              onerror="this.onerror=null;this.src='{{ url_for('static', filename='uploads/default.jpg') }}';">
+          </a>
+          <div>
+            <p class="post-user-name">
+              <a href="/{{ post.user.username }}" class="poster-link">{{ post.user.full_name }}</a>
+            </p>
+            <p class="post-date">{{ post.created_at.strftime('%b %d, %Y') }}</p>
+          </div>
+        </div>
+
+        <!-- Add this 3-dot menu section -->
+        <div class="post-options-wrapper">
+          <button class="dots-btn">⋮</button>
+          <div class="post-options-menu" style="display: none;">
+            <a href="/post/{{ post.id }}" class="view-full-post-option">View Full Post</a>
+          </div>
         </div>
       </div>
 
@@ -97,13 +107,15 @@
             <img src="{{ post.recent_comment.user_pic or url_for('static', filename='uploads/default.jpg') }}"
               onerror="this.onerror=null;this.src='{{ url_for('static', filename='uploads/default.jpg') }}';">
           </a>
-          <p>
-            <strong><a href="/{{ post.recent_comment.username }}" class="poster-link">{{ post.recent_comment.user_name
-                }}</a></strong>
-            {{ post.recent_comment.content }}
-          </p>
+          <div class="comment-body">
+            <p class="comment-meta">
+              <strong><a href="/{{ post.recent_comment.username }}">{{ post.recent_comment.user_name }}</a></strong>
+            </p>
+            <p class="comment-content">{{ post.recent_comment.content }}</p>
+          </div>
         </div>
         {% endif %}
+
         <div class="comment-input">
           <img src="{{ current_user.profile_pic or url_for('static', filename='uploads/default.jpg') }}"
             onerror="this.onerror=null;this.src='{{ url_for('static', filename='uploads/default.jpg') }}';">

@@ -169,9 +169,17 @@
 
 .post-header {
   display: flex;
+  justify-content: space-between; /* Add this */
   align-items: center;
   gap: 10px;
   margin-bottom: 10px;
+}
+
+.post-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-grow: 1;
 }
 
 .post-user-img {
@@ -457,4 +465,42 @@
 
 .like-btn[data-liked="true"] {
   color: #1877f2; /* Facebook-like blue */
+}
+
+/* Post Options Menu */
+.post-options-wrapper {
+  position: relative;
+}
+
+.dots-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  padding: 5px 10px;
+}
+
+.post-options-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 100;
+  min-width: 160px;
+  display: none;
+}
+
+.view-full-post-option {
+  display: block;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #333;
+}
+
+.view-full-post-option:hover {
+  background-color: #f5f5f5;
 }

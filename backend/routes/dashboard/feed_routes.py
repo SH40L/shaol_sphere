@@ -15,8 +15,7 @@ def serialize_comment(comment):
         "user_name": user.full_name,
         "user_pic": user.profile_pic,
         "username": user.username,
-        "content": comment.content,
-        "created_at": comment.created_at.strftime('%b %d, %Y')
+        "content": comment.content
     }
 
 # ✅ POST: Upload new post (image/video + caption)
@@ -208,10 +207,20 @@ def comment_post():
     comment_count = len(comments)
     recent_comment = comments[-1] if comments else None
 
+    # ADD THIS HELPER FUNCTION INSIDE THE ROUTE
+    def serialize_comment_with_time(comment):
+        return {
+            "user_name": User.query.get(comment.user_id).full_name,
+            "user_pic": User.query.get(comment.user_id).profile_pic,
+            "username": User.query.get(comment.user_id).username,
+            "content": comment.content,
+            "created_at": comment.created_at.strftime('%H:%M')  # TIME ONLY
+        }
+
     return jsonify({
         "success": True,
-        "your_comment": serialize_comment(new_comment),
-        "recent_comment": serialize_comment(recent_comment) if recent_comment else None,
+        "your_comment": serialize_comment_with_time(new_comment),
+        "recent_comment": serialize_comment_with_time(recent_comment) if recent_comment else None,
         "comment_count": comment_count
     })
 
@@ -276,3 +285,66 @@ def share_post():
             }
         }
     })
+
+@feed.route('/post/<int:post_id>')
+def view_full_post(post_id):
+    # Eager load relationships to prevent N+1 queries
+    post = Post.query.options(
+        db.joinedload(Post.user)
+    ).get_or_404(post_id)
+
+    # Get comments with proper ordering using a separate query
+    comments = Comment.query.filter_by(post_id=post_id)\
+                  .order_by(Comment.created_at.asc())\
+                  .all()
+
+    # Get original post with user relationship if shared
+    original_post = None
+    if post.shared_from:
+        original_post = Post.query.options(
+            db.joinedload(Post.user)
+        ).get(post.shared_from)
+
+    # Process media URLs for Cloudinary transformations
+    def process_media_url(url):
+        if url and 'res.cloudinary.com' in url:
+            return f"{url}?q=auto:best"
+        return url
+
+    # Prepare post data
+    post_data = {
+        "id": post.id,
+        "content": post.content,
+        "media_url": process_media_url(post.media_url),
+        "created_at": post.created_at,
+        "user": {
+            "username": post.user.username,
+            "full_name": post.user.full_name,
+            "profile_pic": post.user.profile_pic or url_for('static', filename='uploads/default.jpg')
+        },
+        "like_count": Like.query.filter_by(post_id=post.id).count(),
+        "comment_count": len(comments),
+        "liked": Like.query.filter_by(post_id=post.id, user_id=g.user.id).first() is not None if g.user else False,
+        "shared_from": post.shared_from,
+        "original_post": None
+    }
+
+    # Add original post data if shared
+    if original_post:
+        post_data["original_post"] = {
+            "id": original_post.id,
+            "content": original_post.content,
+            "media_url": process_media_url(original_post.media_url),
+            "created_at": original_post.created_at,
+            "user": {
+                "username": original_post.user.username,
+                "full_name": original_post.user.full_name,
+                "profile_pic": original_post.user.profile_pic or url_for('static', filename='uploads/default.jpg')
+            }
+        }
+
+    return render_template('post_details.html',
+        post=post_data,
+        comments=comments,
+        current_user=g.user
+    )
