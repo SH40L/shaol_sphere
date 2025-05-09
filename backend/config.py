@@ -10,6 +10,7 @@ class Config:
 
     # ✅ Database Configuration
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:///local.db")
+    SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True}  # Helps maintain connection
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Email Configuration
@@ -28,6 +29,6 @@ class Config:
     CLOUDINARY_API_SECRET = os.getenv("CLOUDINARY_API_SECRET")
 
     # Add these new lines
-    SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = os.getenv("FLASK_ENV") == "production"
     SESSION_COOKIE_HTTPONLY = True
     REMEMBER_COOKIE_SECURE = True

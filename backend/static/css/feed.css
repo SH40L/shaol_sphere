@@ -454,3 +454,7 @@
   max-width: 100%;
   border-radius: 8px;
 }
+
+.like-btn[data-liked="true"] {
+  color: #1877f2; /* Facebook-like blue */
+}

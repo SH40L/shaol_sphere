@@ -48,7 +48,7 @@ class Post(db.Model):
 
     @property
     def like_count(self):
-        from .models import Like
+        from models import Like
         return Like.query.filter_by(post_id=self.id).count()
 
 class Follower(db.Model):
