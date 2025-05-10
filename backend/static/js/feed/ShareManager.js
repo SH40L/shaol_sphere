@@ -7,6 +7,7 @@ export class ShareManager {
     this.shareMessage = document.getElementById("shareMessage");
     this.sharePreview = document.getElementById("sharePreview");
     this.submitShare = document.getElementById("submitShare");
+    this.feedContainer = document.querySelector(".feed-container") || document.getElementById("posts-section");  // Updated
     this.feedContainer = document.getElementById("feed-posts");
 
     this.initializeEventListeners();

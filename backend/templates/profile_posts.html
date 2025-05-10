@@ -1,0 +1,107 @@
+<!-- templates/profile_posts.html -->
+{% for post in posts %}
+<div class="post" data-post-id="{{ post.id }}">
+    <div class="post-header">
+        <div class="post-header-left">
+            <a href="/{{ user.username }}">
+                <img src="{{ user.profile_pic if user.profile_pic else url_for('static', filename='uploads/default.jpg') }}"
+                    class="post-user-img"
+                    onerror="this.onerror=null;this.src='{{ url_for('static', filename='uploads/default.jpg') }}';">
+            </a>
+            <div>
+                <p class="post-user-name">
+                    <a href="/{{ user.username }}" class="poster-link">{{ user.full_name }}</a>
+                </p>
+                <p class="post-date">{{ post.created_at.strftime('%b %d, %Y') }}</p>
+            </div>
+        </div>
+
+        {% if is_owner %}
+        <div class="post-options-wrapper" data-initialized="false">
+            <button class="dots-btn">⋮</button>
+            <div class="post-options-menu" style="display: none;">
+                <a href="/post/{{ post.id }}" class="view-full-post-option">View Full Post</a>
+                <button class="delete-post-option" data-post-id="{{ post.id }}">Delete Post</button>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    {% if post.shared_from and post.original_post %}
+    <p class="post-caption">{{ post.content }}</p>
+    <div class="shared-post">
+        {% if post.original_post.user %}
+        <div class="shared-post-header">
+            <a href="/{{ post.original_post.user.username }}">
+                <img src="{{ post.original_post.user.profile_pic or url_for('static', filename='uploads/default.jpg') }}"
+                    onerror="this.onerror=null;this.src='{{ url_for('static', filename='uploads/default.jpg') }}';">
+            </a>
+            <div>
+                <p><a href="/{{ post.original_post.user.username }}">{{ post.original_post.user.full_name }}</a></p>
+                <p class="post-date">{{ post.original_post.created_at }}</p>
+            </div>
+        </div>
+        {% endif %}
+        <p class="shared-post-caption">{{ post.original_post.content }}</p>
+        {% if post.original_post.media_url %}
+        <div class="post-media">
+            {% if post.original_post.media_url.endswith('.mp4') %}
+            <video controls src="{{ post.original_post.media_url }}"></video>
+            {% else %}
+            <img src="{{ post.original_post.media_url }}">
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+    {% else %}
+    <p class="post-caption">{{ post.content }}</p>
+    {% if post.media_url %}
+    <div class="post-media">
+        {% if post.media_url.endswith('.mp4') %}
+        <video controls src="{{ post.media_url }}"></video>
+        {% else %}
+        <img src="{{ post.media_url }}">
+        {% endif %}
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <div class="post-actions">
+        <button class="like-btn" data-liked="{{ 'true' if post.liked else 'false' }}" onclick="toggleLike(this)"
+            data-post-id="{{ post.id }}">
+            👍 <span>{{ post.like_count }}</span> Likes
+        </button>
+        <button class="comment-btn">
+            💬 <span>{{ post.comment_count }}</span> Comments
+        </button>
+        <button class="share-btn" data-post-id="{{ post.id }}">
+            🔗 <span>{{ post.share_count }}</span> Shares
+        </button>
+    </div>
+
+    <div class="comment-section">
+        <div class="comment-input">
+            <img src="{{ current_user.profile_pic if current_user.profile_pic else url_for('static', filename='uploads/default.jpg') }}"
+                onerror="this.onerror=null;this.src='{{ url_for('static', filename='uploads/default.jpg') }}';">
+            <input type="text" placeholder="Comment your thought" onkeydown="submitComment(event, this)"
+                data-post-id="{{ post.id }}">
+        </div>
+
+        {% if post.recent_comment %}
+        <div class="comment">
+            <a href="/{{ post.recent_comment.username }}">
+                <img src="{{ post.recent_comment.user_pic or url_for('static', filename='uploads/default.jpg') }}"
+                    onerror="this.onerror=null;this.src='{{ url_for('static', filename='uploads/default.jpg') }}';">
+            </a>
+            <div class="comment-body">
+                <p class="comment-meta">
+                    <strong><a href="/{{ post.recent_comment.username }}">{{ post.recent_comment.user_name
+                            }}</a></strong>
+                </p>
+                <p class="comment-content">{{ post.recent_comment.content }}</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
