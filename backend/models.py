@@ -59,6 +59,10 @@ class Follower(db.Model):
     following_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    # ✅ Add these 2 lines below
+    follower = db.relationship('User', foreign_keys=[follower_id], backref=db.backref('following', cascade="all, delete-orphan"))
+    following = db.relationship('User', foreign_keys=[following_id], backref=db.backref('followers', cascade="all, delete-orphan"))
+
     def __repr__(self):
         return f"<Follow {self.follower_id} -> {self.following_id}>"
 
@@ -70,7 +74,7 @@ class Like(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    user = db.relationship('User', backref='likes')
+    user = db.relationship('User', backref=db.backref('likes', cascade="all, delete-orphan"))
 
     def __repr__(self):
         return f"<Like {self.user_id} on {self.post_id}>"
@@ -84,7 +88,7 @@ class Comment(db.Model):
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    user = db.relationship('User', backref='comments')
+    user = db.relationship('User', backref=db.backref('comments', cascade="all, delete-orphan"))
 
     def __repr__(self):
         return f"<Comment by {self.user_id} on Post {self.post_id}>"
@@ -100,8 +104,8 @@ class Notification(db.Model):
     is_read = db.Column(db.Boolean, default=False)  # ✅ Add this line
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    recipient = db.relationship('User', foreign_keys=[recipient_id])
-    sender = db.relationship('User', foreign_keys=[sender_id])
+    recipient = db.relationship('User', foreign_keys=[recipient_id], backref=db.backref('received_notifications', cascade="all, delete-orphan"))
+    sender = db.relationship('User', foreign_keys=[sender_id], backref=db.backref('sent_notifications', cascade="all, delete-orphan"))
 
     def __repr__(self):
         return f"<Notification {self.type} to {self.recipient_id}>"
