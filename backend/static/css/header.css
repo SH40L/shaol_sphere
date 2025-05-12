@@ -110,3 +110,13 @@
 .burger-dropdown.show {
   display: block;
 }
+
+.notif-badge {
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  background-color: red;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}

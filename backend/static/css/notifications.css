@@ -1,50 +1,81 @@
-/* static/css/notifications.css */
 .notification-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  .notification-title {
-    font-size: 24px;
-    margin-bottom: 10px;
-    color: #222;
-  }
-  
-  .notification-item {
-    display: flex;
-    align-items: center;
-    background-color: #edf7f5;
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    transition: background 0.3s;
-  }
-  
-  .notification-item:hover {
-    background-color: #d9f3ee;
-  }
-  
-  .profile-pic {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 15px;
-    object-fit: cover;
-  }
-  
-  .notification-text {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .notification-text strong {
-    font-size: 16px;
-    margin-bottom: 2px;
-  }
-  
-  .notification-text span {
-    font-size: 14px;
-    color: #555;
-  }
-  
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* 🔹 Flex layout for title + button */
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification-title {
+  font-size: 24px;
+  color: #222;
+  margin: 0;
+}
+
+/* 🔹 Styled button */
+.mark-read-btn {
+  background-color: #3498db;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s, color 0.3s, border 0.3s;
+}
+
+/* 🔄 Faded button when all notifications are read */
+.mark-read-btn.read-all {
+  background-color: transparent;
+  border: 1px solid #3498db;
+  color: #3498db;
+}
+
+/* Notification block */
+.notification-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  text-decoration: none; /* remove underline */
+}
+
+/* ✅ Unread: Highlight */
+.notification-item.unread {
+  background-color: #d9f3ee;
+}
+
+/* ✅ Read: Subtle */
+.notification-item.read {
+  background-color: #edf7f5;
+}
+
+.profile-pic {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 15px;
+  object-fit: cover;
+}
+
+.notification-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.notification-text strong {
+  font-size: 16px;
+  margin-bottom: 2px;
+  color: #222;
+}
+
+.notification-text span {
+  font-size: 14px;
+  color: #555;
+}

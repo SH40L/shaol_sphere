@@ -15,6 +15,7 @@ from routes.dashboard.findfriends_routes import findfriends
 from routes.dashboard.complete_profile_routes import complete_profile
 from routes.dashboard.feed_routes import feed
 from routes.dashboard.notifications_routes import notifications
+from routes.dashboard import search_routes 
 
 # ✅ App Setup
 app = Flask(__name__)
@@ -71,6 +72,7 @@ app.register_blueprint(findfriends)
 app.register_blueprint(complete_profile)
 app.register_blueprint(feed)
 app.register_blueprint(notifications)
+app.register_blueprint(search_routes.search) 
 
 # ✅ Run App
 if __name__ == "__main__":

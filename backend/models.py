@@ -97,6 +97,7 @@ class Notification(db.Model):
     sender_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=True)
     type = db.Column(db.String(20), nullable=False)
+    is_read = db.Column(db.Boolean, default=False)  # ✅ Add this line
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     recipient = db.relationship('User', foreign_keys=[recipient_id])

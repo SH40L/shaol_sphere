@@ -4,28 +4,30 @@
 <script defer src="{{ url_for('static', filename='js/notifications.js') }}"></script>
 
 <div class="notification-container">
-  <h2 class="notification-title">Notifications</h2>
+  <div class="notification-header">
+    <h2 class="notification-title">Notifications</h2>
+    <button id="mark-all-read" class="mark-read-btn">Mark All as Read</button>
+  </div>
   <hr>
 
   <div id="notification-list">
     {% for n in notifications %}
-      <div class="notification-item">
-        <img src="{{ n.sender.profile_pic or url_for('static', filename='uploads/default.jpg') }}" alt="User" class="profile-pic">
-        <div class="notification-text">
-          <strong>{{ n.sender.full_name }}</strong>
-          <span>
-            {% if n.type == 'like' %}
-              Liked your post
-            {% elif n.type == 'comment' %}
-              Commented on your post
-            {% elif n.type == 'share' %}
-              Shared your post
-            {% elif n.type == 'follow' %}
-              Started following you
-            {% endif %}
-          </span>
-        </div>
+    <a href="{{ url_for('notifications.mark_as_read', nid=n.id) }}"
+      class="notification-item {% if not n.is_read %}unread{% else %}read{% endif %}">
+      <img
+        src="{{ n.sender.profile_pic if n.sender.profile_pic and 'default.jpg' not in n.sender.profile_pic else url_for('static', filename='uploads/default.jpg') }}"
+        alt="User" class="profile-pic">
+      <div class="notification-text">
+        <strong>{{ n.sender.full_name }}</strong>
+        <span>
+          {% if n.type == 'like' %}Liked your post
+          {% elif n.type == 'comment' %}Commented on your post
+          {% elif n.type == 'share' %}Shared your post
+          {% elif n.type == 'follow' %}Started following you
+          {% endif %}
+        </span>
       </div>
+    </a>
     {% endfor %}
   </div>
 </div>

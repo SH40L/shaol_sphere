@@ -113,11 +113,12 @@ export class ShareManager {
           }
         }
 
-        // ✅ Inject new shared post (B)
-        if (this.feedContainer && data.post) {
+        // ✅ Inject shared post only if NOT on search page
+        const isSearchPage = window.location.pathname === "/search" || window.location.href.includes("/search?");
+        if (!isSearchPage && this.feedContainer && data.post) {
           injectNewPost(data.post, this.feedContainer, true);
         } else {
-          window.location.reload();
+          this.closeModal(); // just close modal on search page
         }
       } else {
         showToast(data.message || "Failed to share post");

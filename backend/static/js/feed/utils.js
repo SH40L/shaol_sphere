@@ -1,9 +1,17 @@
+// ✅ Toast message utility
+export function showToast(msg) {
+  const toast = document.getElementById("toast");
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 3000);
+}
+
+// ✅ Inject new post card to feed or profile
 export function injectNewPost(post, feedContainer, insertAtTop = false) {
   const div = document.createElement("div");
   div.className = "post";
   div.setAttribute("data-post-id", post.id);
 
-  // ✅ Clean media HTML generator
   const generateMediaHTML = (mediaUrl) => {
     if (!mediaUrl) return "";
     const isVideo = mediaUrl.endsWith(".mp4");
@@ -13,7 +21,6 @@ export function injectNewPost(post, feedContainer, insertAtTop = false) {
       </div>`;
   };
 
-  // ✅ Shared post block
   let sharedHTML = "";
   if (post.shared_from && post.original_post) {
     sharedHTML = `
@@ -33,7 +40,6 @@ export function injectNewPost(post, feedContainer, insertAtTop = false) {
       </div>`;
   }
 
-  // ✅ Recent comment HTML (goes after input)
   let recentCommentHTML = "";
   if (post.recent_comment) {
     recentCommentHTML = `
@@ -49,9 +55,8 @@ export function injectNewPost(post, feedContainer, insertAtTop = false) {
           <p class="comment-content">${post.recent_comment.content}</p>
         </div>
       </div>`;
-  }  
+  }
 
-  // ✅ Final HTML
   div.innerHTML = `
     <div class="post-header">
       <div class="post-header-left">
@@ -106,9 +111,39 @@ export function injectNewPost(post, feedContainer, insertAtTop = false) {
   insertAtTop ? feedContainer.prepend(div) : feedContainer.appendChild(div);
 }
 
-export function showToast(msg) {
-  const toast = document.getElementById("toast");
-  toast.textContent = msg;
-  toast.classList.add("show");
-  setTimeout(() => toast.classList.remove("show"), 3000);
+// ✅ Add missing functions and export them
+
+export function toggleLike(button) {
+  const postId = button.getAttribute("data-post-id");
+
+  fetch(`/like/${postId}`, { method: "POST" })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        button.setAttribute("data-liked", data.liked.toString());
+        const span = button.querySelector("span");
+        if (span) span.textContent = data.like_count;
+      }
+    });
+}
+
+export function submitComment(event, input) {
+  if (event.key === "Enter") {
+    const content = input.value.trim();
+    const postId = input.getAttribute("data-post-id");
+    if (!content) return;
+
+    fetch(`/comment/${postId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          showToast("Comment posted");
+          input.value = "";
+        }
+      });
+  }
 }

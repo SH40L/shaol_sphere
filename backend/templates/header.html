@@ -14,8 +14,8 @@
     <!-- 🔹 Middle: Navigation Icons -->
     <nav class="main-nav">
       {% if g.user %}
-        <a href="/{{ g.user.username }}" id="nav-profile" title="Profile"
-          class="{% if request.path == '/' + g.user.username %}active{% endif %}">&#128100;</a>
+      <a href="/{{ g.user.username }}" id="nav-profile" title="Profile"
+        class="{% if request.path == '/' + g.user.username %}active{% endif %}">&#128100;</a>
       {% endif %}
 
       <a href="/" id="nav-feed" title="Feed" class="{% if request.path == '/' %}active{% endif %}">&#128240;</a>
@@ -24,7 +24,10 @@
         class="{% if request.path == '/findfriends' %}active{% endif %}">&#128101;</a>
 
       <a href="/notifications" id="nav-notifications" title="Notifications"
-        class="{% if request.path == '/notifications' %}active{% endif %}">&#128276;</a>
+        class="{% if request.path == '/notifications' %}active{% endif %}">&#128276; <span id="notif-badge"
+          class="notif-badge" style="display: none;"></span>
+      </a>
+
     </nav>
 
     <!-- 🔹 Right: Search & Burger -->
