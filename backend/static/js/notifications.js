@@ -1,10 +1,22 @@
 document.addEventListener("DOMContentLoaded", () => {
   const markAllBtn = document.getElementById("mark-all-read");
+  const badge = document.getElementById("notif-badge");
   let lastUnreadCount = 0;
+
+  // 🔸 Track initial IDs on page load (to prevent animating old ones)
+  const initialNotificationIDs = new Set(
+    Array.from(document.querySelectorAll(".notification-item")).map(el =>
+      el.getAttribute("href")
+    )
+  );
+
+  // 🔸 Track already animated notification IDs
+  const animatedIDs = new Set(initialNotificationIDs);
 
   // ✅ If page loads with no unread, dim the button
   if (!document.querySelector(".notification-item.unread")) {
     markAllBtn.classList.add("read-all");
+    if (badge) badge.style.display = "none";
   }
 
   // ✅ Mark All as Read
@@ -20,10 +32,11 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(data => {
           if (data.success) {
             document.querySelectorAll(".notification-item").forEach(el => {
-              el.classList.remove("unread");
+              el.classList.remove("unread", "new");
               el.classList.add("read");
             });
             markAllBtn.classList.add("read-all");
+            if (badge) badge.style.display = "none";
           }
         });
     });
@@ -34,14 +47,12 @@ document.addEventListener("DOMContentLoaded", () => {
     fetch("/notifications/unread-count")
       .then(res => res.json())
       .then(data => {
-        const markBtn = document.getElementById("mark-all-read");
+        if (badge) {
+          badge.style.display = data.count > 0 ? "inline-block" : "none";
+        }
 
-        if (markBtn) {
-          if (data.count === 0) {
-            markBtn.classList.add("read-all");
-          } else {
-            markBtn.classList.remove("read-all");
-          }
+        if (markAllBtn) {
+          markAllBtn.classList.toggle("read-all", data.count === 0);
         }
 
         if (data.count > lastUnreadCount) {
@@ -52,6 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   }
 
+  // ✅ Reload and animate only the newest notification
   function reloadNotificationList() {
     fetch("/notifications")
       .then(res => res.text())
@@ -62,11 +74,25 @@ document.addEventListener("DOMContentLoaded", () => {
         const currentList = document.querySelector("#notification-list");
 
         if (newList && currentList) {
-          currentList.innerHTML = newList.innerHTML;
+          const newItems = newList.querySelectorAll(".notification-item");
+          currentList.innerHTML = "";
+
+          newItems.forEach(el => {
+            const id = el.getAttribute("href");
+
+            // ✅ Only animate if not already seen/animated
+            if (!animatedIDs.has(id)) {
+              el.classList.add("new");
+              animatedIDs.add(id); // ✅ Mark as animated so it won't animate again
+            }
+
+            currentList.appendChild(el);
+          });
         }
       });
   }
 
-  setInterval(checkUnreadNotifications, 15000);
+  // 🔁 Start polling
+  setInterval(checkUnreadNotifications, 1000);
   checkUnreadNotifications();
 });

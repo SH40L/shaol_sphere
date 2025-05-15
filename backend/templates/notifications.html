@@ -27,6 +27,7 @@
           {% elif n.type == 'follow' %}Started following you
           {% endif %}
         </span>
+        <small>{{ n.created_at.strftime('%b %d, %Y %I:%M %p') }}</small>
       </div>
     </a>
     {% endfor %}
