@@ -1,10 +1,13 @@
-<!-- templates/findfriends.html -->
-{% include "header.html" %}
+{% extends 'base.html' %}
 
+{% block title %}Find Friends | SHAOL Sphere{% endblock %}
+
+{% block extra_head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/findfriends.css') }}">
-<link rel="icon" type="image/png" href="{{ url_for('static', filename='uploads/shaol_sphere_favicon.png') }}">
 <script defer src="{{ url_for('static', filename='js/findfriends.js') }}"></script>
+{% endblock %}
 
+{% block content %}
 <div class="findfriends-container">
   <!-- 🔍 Search Bar -->
   <div class="search-bar">
@@ -37,5 +40,6 @@
   </div>
 </div>
 
-<!-- ✅ Toast Notification (Reuse) -->
+<!-- ✅ Toast Notification -->
 <div id="emergencyToast" class="custom-toast">Emergency alert sent!</div>
+{% endblock %}

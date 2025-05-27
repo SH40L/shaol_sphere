@@ -1,45 +1,41 @@
-{% include 'header.html' %}
+{% extends 'base.html' %}
+
+{% block title %}Search Results | SHAOL Sphere{% endblock %}
+
+{% block extra_head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/feed.css') }}">
-<link rel="icon" type="image/png" href="{{ url_for('static', filename='uploads/shaol_sphere_favicon.png') }}">
-
-<!-- 🔧 Dummy modal trigger to prevent modal crash -->
-<div id="openPostModal" style="display: none;"></div>
-
-<!-- ✅ Post interaction functionality -->
 <script type="module">
-  import { LikeManager } from '/static/js/feed/LikeManager.js';
-  import { CommentManager } from '/static/js/feed/CommentManager.js';
-  import { ShareManager } from '/static/js/feed/ShareManager.js';
-  import { injectNewPost, toggleLike, submitComment } from '/static/js/feed/utils.js';
+    import { LikeManager } from '/static/js/feed/LikeManager.js';
+    import { CommentManager } from '/static/js/feed/CommentManager.js';
+    import { ShareManager } from '/static/js/feed/ShareManager.js';
+    import { injectNewPost, toggleLike, submitComment } from '/static/js/feed/utils.js';
 
-  document.addEventListener("DOMContentLoaded", () => {
-    // Initialize interactive components
-    new LikeManager();
-    new CommentManager();
-    new ShareManager();
+    document.addEventListener("DOMContentLoaded", () => {
+        new LikeManager();
+        new CommentManager();
+        new ShareManager();
 
-    // ✅ Toggle 3-dot menu
-    document.addEventListener("click", (e) => {
-      if (e.target.classList.contains("dots-btn")) {
-        const menu = e.target.nextElementSibling;
-        document.querySelectorAll(".post-options-menu").forEach((m) => {
-          if (m !== menu) m.style.display = "none";
+        document.addEventListener("click", (e) => {
+            if (e.target.classList.contains("dots-btn")) {
+                const menu = e.target.nextElementSibling;
+                document.querySelectorAll(".post-options-menu").forEach((m) => {
+                    if (m !== menu) m.style.display = "none";
+                });
+                menu.style.display = menu.style.display === "block" ? "none" : "block";
+            } else {
+                document.querySelectorAll(".post-options-menu").forEach((m) => {
+                    m.style.display = "none";
+                });
+            }
         });
-        menu.style.display = menu.style.display === "block" ? "none" : "block";
-      } else {
-        document.querySelectorAll(".post-options-menu").forEach((m) => {
-          m.style.display = "none";
-        });
-      }
     });
-  });
 
-  // Make like/comment functions globally available
-  window.toggleLike = toggleLike;
-  window.submitComment = submitComment;
+    window.toggleLike = toggleLike;
+    window.submitComment = submitComment;
 </script>
+{% endblock %}
 
-
+{% block content %}
 <div class="feed-container">
     <h2 style="margin-bottom: 20px;">Search Results for "{{ query }}"</h2>
 
@@ -155,18 +151,17 @@
 
 <!-- 🔹 Share Modal -->
 <div id="shareModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>Share Post</h3>
-      <span id="closeShareModal">&times;</span>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Share Post</h3>
+            <span id="closeShareModal">&times;</span>
+        </div>
+        <textarea id="shareMessage" placeholder="Say something about this..."></textarea>
+        <div id="sharePreview"></div>
+        <button id="submitShare" disabled class="disabled-post-btn">Share</button>
     </div>
-    <textarea id="shareMessage" placeholder="Say something about this..."></textarea>
-    <div id="sharePreview"></div>
-    <button id="submitShare" disabled class="disabled-post-btn">Share</button>
-  </div>
 </div>
 
-<div id="openPostModal" style="display: none;"></div>
-
 <!-- Toast -->
-<div id="toast" class="custom-toast"></div>
+<div id="toast" class="custom-toast">Post shared!</div>
+{% endblock %}

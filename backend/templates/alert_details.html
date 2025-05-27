@@ -1,6 +1,12 @@
-{% include 'header.html' %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/feed.css') }}">
+{% extends 'base.html' %}
 
+{% block title %}Emergency Alert | SHAOL Sphere{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/feed.css') }}">
+{% endblock %}
+
+{% block content %}
 <div class="feed-container">
   <div class="post" style="margin: 20px auto; max-width: 800px;">
 
@@ -9,8 +15,8 @@
       <div class="post-header-left">
         <a href="/{{ alert.user.username }}">
           <img src="{{ alert.user.profile_pic or url_for('static', filename='uploads/default.jpg') }}"
-               class="post-user-img"
-               onerror="this.onerror=null;this.src='{{ url_for('static', filename='uploads/default.jpg') }}';">
+            class="post-user-img"
+            onerror="this.onerror=null;this.src='{{ url_for('static', filename='uploads/default.jpg') }}';">
         </a>
         <div>
           <p class="post-user-name">
@@ -29,20 +35,19 @@
 
     <!-- 🔹 Map -->
     <div class="post-media">
-      <iframe
-        width="100%" height="300"
-        frameborder="0" style="border-radius: 10px; margin-top: 10px;"
+      <iframe width="100%" height="300" frameborder="0" style="border-radius: 10px; margin-top: 10px;"
         src="https://www.google.com/maps?q={{ alert.latitude }},{{ alert.longitude }}&hl=es;z=14&output=embed">
       </iframe>
     </div>
 
-    <!-- 🔹 Button -->
+    <!-- 🔹 Directions Button -->
     <div style="margin-top: 15px; text-align: center;">
       <a href="https://www.google.com/maps/dir/?api=1&destination={{ alert.latitude }},{{ alert.longitude }}"
-         target="_blank" class="get-directions-btn">
+        target="_blank" class="get-directions-btn">
         🧭 Get Directions on Google Maps
       </a>
     </div>
 
   </div>
 </div>
+{% endblock %}

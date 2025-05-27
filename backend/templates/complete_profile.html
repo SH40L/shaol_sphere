@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Complete Your Profile - SHAOL Sphere</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Your Profile | SHAOL Sphere</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/complete_profile.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='uploads/shaol_sphere_favicon.png') }}">
 </head>
+
 <body class="complete-profile-body">
     <div class="complete-profile-container">
         <h2>Complete Your Profile</h2>
@@ -24,12 +27,14 @@
 
             <div class="form-group">
                 <label for="bio">Bio</label>
-                <textarea name="bio" id="bio" rows="3" placeholder="Tell us about yourself...">{{ user.bio or '' }}</textarea>
+                <textarea name="bio" id="bio" rows="3"
+                    placeholder="Tell us about yourself...">{{ user.bio or '' }}</textarea>
             </div>
 
             <div class="form-group">
                 <label for="location">Location</label>
-                <input type="text" name="location" id="location" value="{{ user.location or '' }}" placeholder="Enter your city, country">
+                <input type="text" name="location" id="location" value="{{ user.location or '' }}"
+                    placeholder="Enter your city, country">
             </div>
 
             <div class="button-row">
@@ -41,4 +46,5 @@
 
     <script src="{{ url_for('static', filename='js/complete_profile.js') }}"></script>
 </body>
+
 </html>

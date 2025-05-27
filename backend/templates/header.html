@@ -1,10 +1,8 @@
 <!-- templates/header.html -->
-<link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
-<link rel="icon" type="image/png" href="{{ url_for('static', filename='uploads/shaol_sphere_favicon.png') }}">
-<script defer src="{{ url_for('static', filename='js/header.js') }}"></script>
 
 <header class="shaol-header">
   <div class="header-container">
+
     <!-- 🔹 Left: Logo -->
     <div class="left-section">
       <a href="/">
@@ -25,10 +23,9 @@
         class="{% if request.path == '/findfriends' %}active{% endif %}">&#128101;</a>
 
       <a href="/notifications" id="nav-notifications" title="Notifications"
-        class="{% if request.path == '/notifications' %}active{% endif %}">&#128276; <span id="notif-badge"
-          class="notif-badge" style="display: none;"></span>
+        class="{% if request.path == '/notifications' %}active{% endif %}">&#128276;
+        <span id="notif-badge" class="notif-badge" style="display: none;"></span>
       </a>
-
     </nav>
 
     <!-- 🔹 Right: Search & Burger -->
@@ -54,8 +51,9 @@
         </div>
       </div>
 
-      <!-- ✅ Toast Notification (Reuse) -->
+      <!-- ✅ Toast Notification -->
       <div id="emergencyToast" class="custom-toast">Emergency alert sent!</div>
     </div>
+
   </div>
 </header>

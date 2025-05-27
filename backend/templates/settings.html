@@ -1,120 +1,119 @@
-{% include 'header.html' %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Settings - SHAOL Sphere</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/settings.css') }}">
-  <link rel="icon" type="image/png" href="{{ url_for('static', filename='uploads/shaol_sphere_favicon.png') }}">
-  <script defer src="{{ url_for('static', filename='js/settings.js') }}"></script>
-</head>
-<body>
-  <div class="settings-wrapper">
-    <!-- 🔼 Top Bar with Profile Image and Route -->
-    <div class="settings-header">
-      <div class="breadcrumb">Home / Settings</div>
-      <div class="profile-thumb">
-        <img src="{{ url_for('static', filename='uploads/default.jpg') if not g.user.profile_pic or 'default' in g.user.profile_pic else g.user.profile_pic }}"
-             alt="Profile Image">
-        <span>{{ g.user.username }}</span>
-      </div>
-    </div>
+{% extends 'base.html' %}
 
-    <!-- 🔽 Main Content Split: Sidebar + Content -->
-    <div class="settings-content">
-      <!-- 📌 Sidebar -->
-      <div class="settings-sidebar">
-        <ul>
-          <li class="tab-link active" data-tab="about">About Me</li>
-          <li class="tab-link" data-tab="security">Security</li>
-          <li class="tab-link" data-tab="images">Profile Images</li>
-          <li class="tab-link" data-tab="delete">Delete Account</li>
-        </ul>
-      </div>
+{% block title %}Settings | SHAOL Sphere{% endblock %}
 
-      <!-- 📄 Right Panel -->
-      <div class="settings-details">
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/settings.css') }}">
+<script defer src="{{ url_for('static', filename='js/settings.js') }}"></script>
+{% endblock %}
 
-        <!-- 🔹 About Me -->
-        <div id="tab-about" class="tab-content active">
-          <h2>About Me</h2>
-          <form id="update-info-form" method="POST" action="/settings/update-info">
-            <label>Full Name</label>
-            <input type="text" name="full_name" value="{{ g.user.full_name }}" required>
-
-            <label>Username</label>
-            <input type="text" value="{{ g.user.username }}" disabled>
-
-            <label>Bio</label>
-            <textarea name="bio">{{ g.user.bio or '' }}</textarea>
-
-            <label>Location</label>
-            <input type="text" name="location" value="{{ g.user.location or '' }}">
-
-            <button type="submit">Update Info</button>
-          </form>
-        </div>
-
-        <!-- 🔹 Security -->
-        <div id="tab-security" class="tab-content hidden">
-          <h2>Change Password</h2>
-          <form id="change-password-form" method="POST" action="/settings/update-password">
-            <label>Old Password</label>
-            <input type="password" name="old_password" required>
-
-            <label>New Password</label>
-            <input type="password" name="new_password" required>
-
-            <label>Confirm New Password</label>
-            <input type="password" name="confirm_password" required>
-
-            <div id="password-error" class="error-msg"></div>
-            <button type="submit">Change Password</button>
-          </form>
-        </div>
-
-        <!-- 🔹 Profile Images -->
-        <div id="tab-images" class="tab-content hidden">
-          <h2>Update Profile & Cover Photos</h2>
-          <form id="image-upload-form" method="POST" enctype="multipart/form-data" action="/settings/update-images">
-            <label>Profile Image</label>
-            <input type="file" name="profile_image" accept="image/*">
-            <img id="profile-preview" class="image-preview"
-                 src="{{ url_for('static', filename='uploads/default.jpg') if not g.user.profile_pic or 'default' in g.user.profile_pic else g.user.profile_pic }}">
-
-            <label>Cover Photo</label>
-            <input type="file" name="cover_image" accept="image/*">
-            <img id="cover-preview" class="image-preview"
-                 src="{{ url_for('static', filename='uploads/default_cover.jpg') if not g.user.cover_image or 'default' in g.user.cover_image else g.user.cover_image }}">
-
-            <button type="submit">Upload Images</button>
-          </form>
-        </div>
-
-        <!-- 🔹 Delete Account -->
-        <div id="tab-delete" class="tab-content hidden">
-          <h2>Delete Account</h2>
-          <p class="warning-text">This action is permanent and cannot be undone.</p>
-          <button id="show-delete-modal" class="danger-button">Delete My Account</button>
-
-          <!-- ⚠️ Confirmation Modal -->
-          <div id="delete-modal" class="modal hidden">
-            <div class="modal-content">
-              <h3>Confirm Deletion</h3>
-              <p>Enter your password to delete your account:</p>
-              <input type="password" id="delete-password" placeholder="Your password">
-              <div id="delete-error" class="error-msg"></div>
-              <button id="confirm-delete" class="danger-button">Confirm Delete</button>
-              <button id="cancel-delete">Cancel</button>
-            </div>
-          </div>
-        </div>
-
-      </div>
+{% block content %}
+<div class="settings-wrapper">
+  <!-- 🔼 Top Bar with Profile Image and Route -->
+  <div class="settings-header">
+    <div class="breadcrumb">Home / Settings</div>
+    <div class="profile-thumb">
+      <img
+        src="{{ url_for('static', filename='uploads/default.jpg') if not g.user.profile_pic or 'default' in g.user.profile_pic else g.user.profile_pic }}"
+        alt="Profile Image">
+      <span>{{ g.user.username }}</span>
     </div>
   </div>
 
-  <!-- ✅ Toast Notification -->
-  <div id="toast" class="toast hidden">Account deleted successfully.</div>
-</body>
-</html>
+  <!-- 🔽 Main Content Split: Sidebar + Content -->
+  <div class="settings-content">
+    <!-- 📌 Sidebar -->
+    <div class="settings-sidebar">
+      <ul>
+        <li class="tab-link active" data-tab="about">About Me</li>
+        <li class="tab-link" data-tab="security">Security</li>
+        <li class="tab-link" data-tab="images">Profile Images</li>
+        <li class="tab-link" data-tab="delete">Delete Account</li>
+      </ul>
+    </div>
+
+    <!-- 📄 Right Panel -->
+    <div class="settings-details">
+
+      <!-- 🔹 About Me -->
+      <div id="tab-about" class="tab-content active">
+        <h2>About Me</h2>
+        <form id="update-info-form" method="POST" action="/settings/update-info">
+          <label>Full Name</label>
+          <input type="text" name="full_name" value="{{ g.user.full_name }}" required>
+
+          <label>Username</label>
+          <input type="text" value="{{ g.user.username }}" disabled>
+
+          <label>Bio</label>
+          <textarea name="bio">{{ g.user.bio or '' }}</textarea>
+
+          <label>Location</label>
+          <input type="text" name="location" value="{{ g.user.location or '' }}">
+
+          <button type="submit">Update Info</button>
+        </form>
+      </div>
+
+      <!-- 🔹 Security -->
+      <div id="tab-security" class="tab-content hidden">
+        <h2>Change Password</h2>
+        <form id="change-password-form" method="POST" action="/settings/update-password">
+          <label>Old Password</label>
+          <input type="password" name="old_password" required>
+
+          <label>New Password</label>
+          <input type="password" name="new_password" required>
+
+          <label>Confirm New Password</label>
+          <input type="password" name="confirm_password" required>
+
+          <div id="password-error" class="error-msg"></div>
+          <button type="submit">Change Password</button>
+        </form>
+      </div>
+
+      <!-- 🔹 Profile Images -->
+      <div id="tab-images" class="tab-content hidden">
+        <h2>Update Profile & Cover Photos</h2>
+        <form id="image-upload-form" method="POST" enctype="multipart/form-data" action="/settings/update-images">
+          <label>Profile Image</label>
+          <input type="file" name="profile_image" accept="image/*">
+          <img id="profile-preview" class="image-preview"
+            src="{{ url_for('static', filename='uploads/default.jpg') if not g.user.profile_pic or 'default' in g.user.profile_pic else g.user.profile_pic }}">
+
+          <label>Cover Photo</label>
+          <input type="file" name="cover_image" accept="image/*">
+          <img id="cover-preview" class="image-preview"
+            src="{{ url_for('static', filename='uploads/default_cover.jpg') if not g.user.cover_image or 'default' in g.user.cover_image else g.user.cover_image }}">
+
+          <button type="submit">Upload Images</button>
+        </form>
+      </div>
+
+      <!-- 🔹 Delete Account -->
+      <div id="tab-delete" class="tab-content hidden">
+        <h2>Delete Account</h2>
+        <p class="warning-text">This action is permanent and cannot be undone.</p>
+        <button id="show-delete-modal" class="danger-button">Delete My Account</button>
+
+        <!-- ⚠️ Confirmation Modal -->
+        <div id="delete-modal" class="modal hidden">
+          <div class="modal-content">
+            <h3>Confirm Deletion</h3>
+            <p>Enter your password to delete your account:</p>
+            <input type="password" id="delete-password" placeholder="Your password">
+            <div id="delete-error" class="error-msg"></div>
+            <button id="confirm-delete" class="danger-button">Confirm Delete</button>
+            <button id="cancel-delete">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ✅ Toast Notification -->
+<div id="toast" class="toast hidden">Account deleted successfully.</div>
+{% endblock %}

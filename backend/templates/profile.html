@@ -1,9 +1,14 @@
-{% include 'header.html' %}
+{% extends 'base.html' %}
+
+{% block title %}{{ user.full_name }}{% endblock %}
+
+{% block extra_head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/feed.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
-<link rel="icon" type="image/png" href="{{ url_for('static', filename='uploads/shaol_sphere_favicon.png') }}">
 <script type="module" src="{{ url_for('static', filename='js/profile.js') }}"></script>
+{% endblock %}
 
+{% block content %}
 <div class="profile-container">
   <!-- Cover Image -->
   <div class="cover-image">
@@ -62,7 +67,7 @@
     </div>
   </div>
 
-  <!-- Share Modal (NEWLY ADDED) -->
+  <!-- Share Modal -->
   <div id="shareModal" class="modal" style="display: none;">
     <div class="modal-content">
       <div class="modal-header">
@@ -78,3 +83,4 @@
 
 <!-- Toast Notification -->
 <div id="toast" class="custom-toast"></div>
+{% endblock %}

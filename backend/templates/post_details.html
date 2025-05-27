@@ -1,7 +1,12 @@
-{% include 'header.html' %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/feed.css') }}">
-<link rel="icon" type="image/png" href="{{ url_for('static', filename='uploads/shaol_sphere_favicon.png') }}">
+{% extends 'base.html' %}
 
+{% block title %}SHAOL Sphere{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/feed.css') }}">
+{% endblock %}
+
+{% block content %}
 <div class="feed-container">
     <div class="post" style="margin: 20px auto; max-width: 800px;">
 
@@ -87,7 +92,7 @@
 
         <!-- Comment Section -->
         <div class="comment-section">
-            <!-- Comment Input (Top) -->
+            <!-- Comment Input -->
             <div class="comment-input">
                 <img src="{{ current_user.profile_pic or url_for('static', filename='uploads/default.jpg') }}"
                     onerror="this.onerror=null;this.src='{{ url_for('static', filename='uploads/default.jpg') }}'">
@@ -95,7 +100,7 @@
                     onkeydown="submitComment(event, this)">
             </div>
 
-            <!-- All Comments: Newest First -->
+            <!-- All Comments -->
             {% for comment in comments|reverse %}
             <div class="comment">
                 <a href="/{{ comment.user.username }}">
@@ -141,5 +146,6 @@
     new PostOptionsManager();
     new LikeManager();
     new CommentManager();
-    new ShareManager(); // ✅ Required to activate share modal on post details
+    new ShareManager();
 </script>
+{% endblock %}

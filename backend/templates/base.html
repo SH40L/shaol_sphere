@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}SHAOL Sphere{% endblock %}</title>
+
+    <!-- 🔁 Shared CSS and favicon -->
+    <link rel="icon" href="{{ url_for('static', filename='uploads/favicon.ico') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='uploads/favicon.ico') }}">
+
+    <link rel="icon" href="{{ url_for('static', filename='uploads/favicon.png') }}" type="image/png">
+
+    <!-- 🔁 Shared JS -->
+    <script defer src="{{ url_for('static', filename='js/header.js') }}"></script>
+
+    <!-- 🔁 Page-specific CSS/JS -->
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+
+    <!-- ✅ Shared header -->
+    {% include 'header.html' %}
+
+    <!-- 🔁 Page content -->
+    {% block content %}{% endblock %}
+
+</body>
+
+</html>
