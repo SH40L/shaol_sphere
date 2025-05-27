@@ -1,3 +1,9 @@
+import os, sys
+if os.getcwd().endswith("/backend") or os.getcwd().endswith("\\backend"):
+    sys.path.insert(0, os.getcwd())
+else:
+    sys.path.insert(0, os.path.join(os.getcwd(), "backend"))
+
 from flask import Flask, render_template, redirect, url_for, session, g, request
 from flask_cors import CORS
 from flask_login import LoginManager, login_user
