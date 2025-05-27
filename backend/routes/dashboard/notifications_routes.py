@@ -49,6 +49,9 @@ def mark_as_read(nid):
             if user:
                 return redirect(f"/{user.username}")
 
+        elif note.type == 'emergency':
+            return redirect(f"/alert/{note.alert_id}")
+
     return redirect(url_for("notifications.view_notifications"))
 
 @notifications.route("/notifications/mark-all-read", methods=["POST"])

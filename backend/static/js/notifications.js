@@ -93,6 +93,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // 🔁 Start polling
-  setInterval(checkUnreadNotifications, 1000);
+  setInterval(checkUnreadNotifications, 5000);
   checkUnreadNotifications();
 });

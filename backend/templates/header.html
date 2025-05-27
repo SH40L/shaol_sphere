@@ -37,8 +37,25 @@
       <div class="burger-menu" onclick="toggleBurgerMenu()">☰</div>
       <div id="burger-dropdown" class="burger-dropdown hidden">
         <a href="/settings">Settings</a>
+        <a href="#" id="openEmergencyModal">Emergency Alert</a>
         <a href="/auth/logout">Logout</a>
       </div>
+
+      <!-- 🔥 Emergency Alert Modal -->
+      <div id="emergencyModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Send Emergency Alert</h3>
+            <span id="closeEmergencyModal">&times;</span>
+          </div>
+          <textarea id="emergencyMessage" placeholder="Describe your emergency..."></textarea>
+          <p id="locationStatus" style="font-size: 13px; color: #888;">Fetching location...</p>
+          <button id="submitEmergencyAlert" class="disabled-post-btn" disabled>Send Alert</button>
+        </div>
+      </div>
+
+      <!-- ✅ Toast Notification (Reuse) -->
+      <div id="emergencyToast" class="custom-toast">Emergency alert sent!</div>
     </div>
   </div>
 </header>

@@ -100,12 +100,27 @@ class Notification(db.Model):
     recipient_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     sender_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=True)
+    alert_id = db.Column(db.Integer, db.ForeignKey('emergency_alerts.id'), nullable=True)
     type = db.Column(db.String(20), nullable=False)
-    is_read = db.Column(db.Boolean, default=False)  # ✅ Add this line
+    is_read = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    recipient = db.relationship('User', foreign_keys=[recipient_id], backref=db.backref('received_notifications', cascade="all, delete-orphan"))
-    sender = db.relationship('User', foreign_keys=[sender_id], backref=db.backref('sent_notifications', cascade="all, delete-orphan"))
+    recipient = db.relationship('User', foreign_keys=[recipient_id])
+    sender = db.relationship('User', foreign_keys=[sender_id])
+    post = db.relationship('Post', backref='notifications', foreign_keys=[post_id])
+    alert = db.relationship('EmergencyAlert', backref='notifications', foreign_keys=[alert_id])
+
+class EmergencyAlert(db.Model):
+    __tablename__ = 'emergency_alerts'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    latitude = db.Column(db.Float, nullable=False)
+    longitude = db.Column(db.Float, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship('User', backref=db.backref('emergency_alerts', cascade="all, delete-orphan"))
 
     def __repr__(self):
-        return f"<Notification {self.type} to {self.recipient_id}>"
+        return f"<EmergencyAlert by User {self.user_id} at {self.created_at}>"

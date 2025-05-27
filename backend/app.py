@@ -17,6 +17,7 @@ from routes.dashboard.feed_routes import feed
 from routes.dashboard.notifications_routes import notifications
 from routes.dashboard import search_routes 
 from routes.dashboard import settings_routes
+from routes.dashboard.emergency_routes import emergency
 
 # ✅ App Setup
 app = Flask(__name__)
@@ -75,6 +76,7 @@ app.register_blueprint(feed)
 app.register_blueprint(notifications)
 app.register_blueprint(search_routes.search) 
 app.register_blueprint(settings_routes.settings)
+app.register_blueprint(emergency)
 
 # ✅ Run App
 if __name__ == "__main__":

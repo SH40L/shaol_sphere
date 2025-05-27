@@ -25,6 +25,7 @@
           {% elif n.type == 'comment' %}Commented on your post
           {% elif n.type == 'share' %}Shared your post
           {% elif n.type == 'follow' %}Started following you
+          {% elif n.type == 'emergency' %}Sent an emergency alert
           {% endif %}
         </span>
         <small>{{ n.created_at.strftime('%b %d, %Y %I:%M %p') }}</small>
@@ -33,3 +34,6 @@
     {% endfor %}
   </div>
 </div>
+
+<!-- ✅ Toast Notification (Reuse) -->
+<div id="emergencyToast" class="custom-toast">Emergency alert sent!</div>
