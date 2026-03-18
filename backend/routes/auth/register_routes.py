@@ -40,16 +40,23 @@ def send_verification_email(user):
 
         # ✅ Send the POST request to the Webhook
         response = requests.post(Config.GOOGLE_SCRIPT_URL, json=payload)
-        response_data = response.json()
-
-        if response_data.get("status") == "success":
-            return True
-        else:
-            print("Google Script Error:", response_data)
+        
+        # 🐛 NEW DEBUGGING LOGIC: Check if response is actually JSON
+        try:
+            response_data = response.json()
+            if response_data.get("status") == "success":
+                return True
+            else:
+                print("❌ Google Script Error:", response_data)
+                return False
+        except requests.exceptions.JSONDecodeError:
+            # If Google sends HTML instead of JSON, print the raw HTML to see the real error!
+            print("❌ Google Script returned non-JSON response. Raw text:")
+            print(response.text)
             return False
 
     except Exception as e:
-        print("Error sending email via webhook:", e)
+        print("❌ Error sending email via webhook:", e)
         return False
 
 @register_bp.route("/register", methods=["POST"])
