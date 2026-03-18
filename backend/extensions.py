@@ -1,8 +1,5 @@
 # extensions.py
-from flask_mail import Mail
 import cloudinary
-
-mail = Mail()
 
 # ✅ Cloudinary setup moved into callable function
 def configure_cloudinary(app):

@@ -1,11 +1,10 @@
 from flask import Blueprint, request, jsonify, render_template, url_for
 from werkzeug.security import generate_password_hash
 from models import User
-from extensions import mail
-from flask_mail import Message
 from database import db
 from .utils import generate_jwt_token
 import jwt
+import requests
 from config import Config
 
 password_reset_bp = Blueprint("password_reset", __name__)
@@ -89,29 +88,43 @@ def send_password_reset_email(user):
         user.password_reset_used = False
         db.session.commit()
 
-        msg = Message(
-            "Reset Your Password - SHAOL Sphere",
-            sender="shaolsphere@gmail.com",
-            recipients=[user.email]
-        )
-        msg.body = f"""
-        Hello {user.username},
-
-        You requested a password reset. Click the link below to reset your password:
-
-        {reset_link}
-
-        This link will expire in 30 minutes.
-
-        If you didn’t request this, ignore this email.
-
-        Thanks,
-        SHAOL Sphere Team
+        # ✅ Format the email as HTML for the Google Script
+        email_html = f"""
+        <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+            <h2>Password Reset Request</h2>
+            <p>Hello {user.username},</p>
+            <p>You requested a password reset for your SHAOL Sphere account. Click the button below to set a new password:</p>
+            <p>
+                <a href="{reset_link}" style="background-color: #dc3545; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">
+                    Reset Password
+                </a>
+            </p>
+            <p><em>This link will expire in 30 minutes.</em></p>
+            <p>If you didn't request this, you can safely ignore this email. Your password will remain unchanged.</p>
+            <br>
+            <p>Thanks,<br><strong>SHAOL Sphere Team</strong></p>
+        </div>
         """
-        mail.send(msg)
-        return True
+
+        # ✅ Payload for Google Apps Script
+        payload = {
+            "to": user.email,
+            "subject": "Reset Your Password - SHAOL Sphere",
+            "htmlBody": email_html
+        }
+
+        # ✅ Send the POST request to the Webhook
+        response = requests.post(Config.GOOGLE_SCRIPT_URL, json=payload)
+        response_data = response.json()
+
+        if response_data.get("status") == "success":
+            return True
+        else:
+            print("Google Script Error:", response_data)
+            return False
+
     except Exception as e:
-        print("Error sending password reset email:", e)
+        print("Error sending password reset email via webhook:", e)
         return False
 
 # ✅ Request reset link API

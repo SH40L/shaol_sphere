@@ -2,10 +2,10 @@ from flask import Blueprint, request, jsonify, url_for
 from werkzeug.security import generate_password_hash
 from database import db
 from models import User
-from extensions import mail
-from flask_mail import Message
 from .utils import generate_jwt_token
-from datetime import datetime  # Add at the TOP
+from datetime import datetime  
+import requests
+from config import Config
 
 register_bp = Blueprint("register", __name__)
 
@@ -14,30 +14,42 @@ def send_verification_email(user):
         token = generate_jwt_token(user.email, expiration_minutes=60)
         verification_link = url_for('auth.email_verification.verify_email', token=token, _external=True)
 
-        msg = Message(
-            "Verify Your Email - SHAOL Sphere",
-            sender="shaolsphere@gmail.com",
-            recipients=[user.email]
-        )
-        msg.body = f"""
-        Hello {user.username},
-
-        Welcome to SHAOL Sphere! Please verify your email to activate your account.
-
-        Click the link below to verify:
-        {verification_link}
-
-        This link will expire in 1 hour.
-
-        If you didn’t request this, ignore this email.
-
-        Thanks,
-        SHAOL Sphere Team
+        # ✅ Format the email as HTML for the Google Script
+        email_html = f"""
+        <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+            <h2>Welcome to SHAOL Sphere, {user.username}!</h2>
+            <p>Please verify your email to activate your account.</p>
+            <p>
+                <a href="{verification_link}" style="background-color: #007BFF; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">
+                    Verify Email
+                </a>
+            </p>
+            <p><em>This link will expire in 1 hour.</em></p>
+            <p>If you didn't request this, you can safely ignore this email.</p>
+            <br>
+            <p>Thanks,<br><strong>SHAOL Sphere Team</strong></p>
+        </div>
         """
-        mail.send(msg)
-        return True
+
+        # ✅ Payload for Google Apps Script
+        payload = {
+            "to": user.email,
+            "subject": "Verify Your Email - SHAOL Sphere",
+            "htmlBody": email_html
+        }
+
+        # ✅ Send the POST request to the Webhook
+        response = requests.post(Config.GOOGLE_SCRIPT_URL, json=payload)
+        response_data = response.json()
+
+        if response_data.get("status") == "success":
+            return True
+        else:
+            print("Google Script Error:", response_data)
+            return False
+
     except Exception as e:
-        print("Error sending email:", e)
+        print("Error sending email via webhook:", e)
         return False
 
 @register_bp.route("/register", methods=["POST"])
@@ -46,7 +58,7 @@ def register():
         data = request.json
         username = data.get("username", "").strip()
         full_name = data.get("full_name", "").strip()
-        date_of_birth_str = data.get("date_of_birth", "").strip()  # Renamed for clarity
+        date_of_birth_str = data.get("date_of_birth", "").strip()  
         gender = data.get("gender", "").strip()
         email = data.get("email", "").strip()
         password = data.get("password", "").strip()
@@ -69,7 +81,7 @@ def register():
         new_user = User(
             username=username,
             full_name=full_name,
-            date_of_birth=date_of_birth,  # Now a date object
+            date_of_birth=date_of_birth,  
             gender=gender,
             email=email,
             password_hash=generate_password_hash(password),

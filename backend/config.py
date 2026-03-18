@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 
 # ✅ Load environment variables from .env file
-load_dotenv()
+load_dotenv(override=True)
 
 class Config:
     # ✅ Secret Key (used for both session and JWT)
@@ -13,12 +13,8 @@ class Config:
     SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True}  # Helps maintain connection
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    # Email Configuration
-    MAIL_SERVER = os.getenv("MAIL_SERVER", "smtp.gmail.com")
-    MAIL_PORT = int(os.getenv("MAIL_PORT", 587))
-    MAIL_USE_TLS = os.getenv("MAIL_USE_TLS", "True") == "True"
-    MAIL_USERNAME = os.getenv("MAIL_USERNAME", "")
-    MAIL_PASSWORD = os.getenv("MAIL_PASSWORD", "")
+    # Email API Configuration (Google Apps Script)
+    GOOGLE_SCRIPT_URL = os.getenv("GOOGLE_SCRIPT_URL")
 
     # JWT Configuration
     JWT_EXPIRATION_MINUTES = int(os.getenv("JWT_EXPIRATION_MINUTES", 30))

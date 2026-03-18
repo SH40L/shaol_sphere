@@ -9,7 +9,7 @@ from flask_cors import CORS
 from flask_login import LoginManager, login_user
 from config import Config
 from database import db
-from extensions import mail, configure_cloudinary
+from extensions import configure_cloudinary
 from models import User
 import jwt
 
@@ -31,7 +31,6 @@ app.config.from_object(Config)
 
 # ✅ Initialize Extensions
 db.init_app(app)
-mail.init_app(app)
 CORS(app)
 configure_cloudinary(app)
 

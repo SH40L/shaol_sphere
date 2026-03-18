@@ -13,7 +13,7 @@ The platform features a highly secure, modular backend powered by Flask and JWT 
 ---
 
 ## ✨ Key Features
-* **Secure Authentication:** Robust login system using JWT (JSON Web Tokens), Flask-Login, secure password hashing, and SMTP-based email verification.
+* **Secure Authentication:** Robust login system using JWT (JSON Web Tokens), Flask-Login, secure password hashing, and custom Webhook-based email verification.
 * **Dynamic Feed:** Interactive social feed where users can create posts (with images), leave comments, like content, and share posts from others.
 * **Profile Management:** Fully customizable user profiles with Cloudinary-backed profile and cover image uploads.
 * **Emergency Alerts:** Built-in emergency routing system that instantly sends geolocation alerts and in-app notifications to a user's followers.
@@ -26,7 +26,7 @@ The platform features a highly secure, modular backend powered by Flask and JWT 
 * **Frontend:** HTML5, CSS3, JavaScript (Modular ES6)
 * **Database:** PostgreSQL (Cloud hosted via Neon)
 * **Cloud Storage:** Cloudinary API for media management
-* **Email Service:** Standard SMTP (via `Flask-Mail`) for verification and password resets
+* **Email Service:** Custom Google Apps Script Webhook API (Bypasses SMTP blocks)
 * **Deployment:** Render, Gunicorn (`Procfile` configured)
 
 ---
@@ -40,12 +40,8 @@ SECRET_KEY=your_flask_secret_key
 DATABASE_URL=your_postgresql_database_url
 JWT_EXPIRATION_MINUTES=30
 
-# SMTP Email Configuration (Flask-Mail)
-MAIL_SERVER=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USE_TLS=True
-MAIL_USERNAME=your_gmail_address
-MAIL_PASSWORD=your_gmail_app_password
+# Email API Configuration (Google Apps Script)
+GOOGLE_SCRIPT_URL=your_google_apps_script_web_app_url
 
 # Cloudinary Configuration
 CLOUDINARY_CLOUD_NAME=your_cloudinary_name
