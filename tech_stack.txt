@@ -1,0 +1,27 @@
+# SHAOL Sphere - Technology Stack
+
+## Frontend
+- HTML5
+- CSS3 (Custom Styling, Responsive Design)
+- JavaScript (Vanilla ES6, Modular Architecture)
+
+## Backend
+- Python 3.10+
+- Flask 3.0.3 (Core Web Framework)
+- Flask-Login (Session Management)
+- PyJWT (JSON Web Tokens for Secure Email Links)
+- Werkzeug (Password Hashing & Security)
+- Requests (API Webhook Integration)
+
+## Database & ORM
+- PostgreSQL (Cloud-hosted via Neon)
+- Flask-SQLAlchemy (Object-Relational Mapping)
+- psycopg2-binary (PostgreSQL adapter for Python)
+
+## Cloud Services & APIs
+- Cloudinary (Media storage for Profile/Cover images and Posts)
+- Google Apps Script Webhook (Custom Email API API bypassing SMTP restrictions)
+
+## Deployment & Hosting
+- Render (PaaS for Web Service Hosting)
+- Gunicorn (Python WSGI HTTP Server for Production)
