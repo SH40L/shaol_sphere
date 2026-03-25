@@ -1,6 +1,6 @@
 # 🌐 SHAOL Sphere - Social Networking Platform
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Render-blue)](https://your-render-url-here.onrender.com)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Render-blue)](https://shaolsphere.onrender.com/)
 [![Python](https://img.shields.io/badge/Python-3.10-blue)](https://www.python.org/)
 [![Framework](https://img.shields.io/badge/Framework-Flask-red)](https://flask.palletsprojects.com/)
 [![Database](https://img.shields.io/badge/Database-PostgreSQL-orange)](https://postgresql.org/)
